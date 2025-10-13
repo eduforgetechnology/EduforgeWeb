@@ -1,3 +1,4 @@
+app.set('trust proxy', 1);
 const path = require('path');
 const dotenv = require('dotenv');
 
