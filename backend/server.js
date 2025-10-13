@@ -19,7 +19,7 @@ const app = express();
 
 // Configure CORS for deployment
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN || '*',
+  origin: process.env.CORS_ORIGIN || 'https://eduforge-web.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
   optionsSuccessStatus: 204
@@ -43,12 +43,25 @@ if (!mongoUri) {
   process.exit(1);
 }
 
-// Connect to MongoDB with retry logic
+// Global variable to cache the database connection
+let cachedDb = null;
+
+// Connect to MongoDB with retry logic - optimized for serverless
 const connectDB = async () => {
+  if (cachedDb) {
+    console.log('Using cached database connection');
+    return true;
+  }
+
   try {
     const conn = await mongoose.connect(mongoUri, {
       serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+      // Settings recommended for serverless environments
+      bufferCommands: false,
+      socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
     });
+    
+    cachedDb = conn;
     console.log(`MongoDB Connected: ${conn.connection.host}`);
     return true;
   } catch (error) {
@@ -83,24 +96,33 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start server
-const PORT = process.env.PORT || 5000;
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
+  
+  // Connect to DB and start server
+  connectDB().then((connected) => {
+    if (connected) {
+      const server = app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+      });
 
-// Connect to DB and start server
-connectDB().then((connected) => {
-  if (connected) {
-    const server = app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
+      // Handle unhandled promise rejections
+      process.on('unhandledRejection', (err) => {
+        console.log(`Error: ${err.message}`);
+        // Close server & exit process
+        server.close(() => process.exit(1));
+      });
+    } else {
+      console.error('Failed to connect to MongoDB. Server not started.');
+      process.exit(1);
+    }
+  });
+} else {
+  // For Vercel serverless environment
+  // Connect to MongoDB at startup
+  connectDB();
+}
 
-    // Handle unhandled promise rejections
-    process.on('unhandledRejection', (err) => {
-      console.log(`Error: ${err.message}`);
-      // Close server & exit process
-      server.close(() => process.exit(1));
-    });
-  } else {
-    console.error('Failed to connect to MongoDB. Server not started.');
-    process.exit(1);
-  }
-});
+// Export the Express app for Vercel
+module.exports = app;
