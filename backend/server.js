@@ -1,4 +1,3 @@
-app.set('trust proxy', 1);
 const path = require('path');
 const dotenv = require('dotenv');
 
@@ -15,7 +14,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+// Initialize Express app first
 const app = express();
+
+// Then set properties on the app
+app.set('trust proxy', 1);
 
 // Configure CORS for deployment
 const corsOptions = {
@@ -48,17 +51,25 @@ let cachedDb = null;
 
 // Connect to MongoDB with retry logic - optimized for serverless
 const connectDB = async () => {
-  if (cachedDb) {
+  if (cachedDb && mongoose.connection.readyState === 1) {
     console.log('Using cached database connection');
     return true;
   }
 
   try {
+    // Close previous connection if exists but in wrong state
+    if (mongoose.connection.readyState !== 0) {
+      await mongoose.connection.close();
+    }
+    
     const conn = await mongoose.connect(mongoUri, {
-      serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+      serverSelectionTimeoutMS: 10000, // Increased timeout to 10s
       // Settings recommended for serverless environments
       bufferCommands: false,
       socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+      family: 4, // Force IPv4
+      connectTimeoutMS: 10000, // Connection timeout of 10 seconds
+      maxPoolSize: 1, // Maintain up to 1 socket connection
     });
     
     cachedDb = conn;
@@ -70,7 +81,38 @@ const connectDB = async () => {
   }
 };
 
-// Routes
+// Health check and debug routes
+app.get('/', (req, res) => {
+  res.status(200).json({ 
+    status: 'success',
+    message: 'EduForge API is running',
+    environment: process.env.NODE_ENV,
+    timestamp: new Date().toISOString()
+  });
+});
+
+app.get('/api/health', async (req, res) => {
+  try {
+    // Check database connection
+    const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+    
+    res.status(200).json({
+      status: 'success',
+      message: 'API health check passed',
+      environment: process.env.NODE_ENV,
+      database: dbStatus,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      status: 'error',
+      message: 'API health check failed',
+      error: error.message 
+    });
+  }
+});
+
+// Main application routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/courses', require('./routes/courses'));
 
@@ -85,14 +127,26 @@ app.get('/health', (req, res) => {
 
 // Error handling middleware
 app.use((req, res, next) => {
-  res.status(404).json({ message: 'Endpoint not found' });
+  res.status(404).json({ 
+    status: 'error',
+    message: 'Endpoint not found',
+    path: req.originalUrl
+  });
 });
 
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ 
+  // Log error but avoid leaking sensitive details
+  console.error(`Error: ${err.message}`);
+  console.error(`Stack: ${err.stack}`);
+  
+  const statusCode = err.statusCode || 500;
+  
+  res.status(statusCode).json({ 
+    status: 'error',
     message: process.env.NODE_ENV === 'production' ? 'Server error' : err.message,
-    stack: process.env.NODE_ENV === 'production' ? '🥞' : err.stack
+    path: req.originalUrl,
+    // Only include stack trace in development
+    ...(process.env.NODE_ENV !== 'production' && { stack: err.stack })
   });
 });
 
@@ -120,9 +174,23 @@ if (process.env.NODE_ENV !== 'production') {
   });
 } else {
   // For Vercel serverless environment
-  // Connect to MongoDB at startup
-  connectDB();
+  // Connect to MongoDB at startup on first cold start
+  // Don't wait for the connection to complete
+  connectDB()
+    .then(() => console.log('MongoDB connection initialized for serverless environment'))
+    .catch(err => console.error('MongoDB connection failed in serverless environment:', err.message));
 }
+
+// Properly handle uncaught errors in serverless environment
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught exception:', err);
+  // Don't exit process in serverless environment
+});
+
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled rejection:', err);
+  // Don't exit process in serverless environment
+});
 
 // Export the Express app for Vercel
 module.exports = app;
