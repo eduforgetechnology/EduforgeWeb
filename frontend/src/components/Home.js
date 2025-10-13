@@ -29,7 +29,7 @@ const Home = () => {
 
   useEffect(() => {
     // Use environment variable with fallback to ensure API works even if env isn't loaded
-    const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://eduforge-api.vercel.app';
+    const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://eduforge-web.vercel.app';
     setIsLoading(true);
     
     axios.get(`${apiUrl}/api/courses`)

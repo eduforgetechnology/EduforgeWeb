@@ -22,7 +22,7 @@ app.set('trust proxy', 1);
 
 // Configure CORS for deployment
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN ,
+  origin: process.env.CORS_ORIGIN || 'https://eduforge-web-frontend.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
   optionsSuccessStatus: 204
@@ -36,6 +36,29 @@ app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('X-Frame-Options', 'DENY');
+  next();
+});
+
+// Ensure MongoDB is connected before processing API requests
+app.use(async (req, res, next) => {
+  // Skip this middleware for non-API routes or health checks
+  if (req.path === '/' || req.path === '/api/health') {
+    return next();
+  }
+  
+  // Ensure MongoDB is connected
+  if (mongoose.connection.readyState !== 1) {
+    try {
+      console.log('MongoDB not connected, attempting to connect before proceeding...');
+      await connectDB();
+      if (mongoose.connection.readyState !== 1) {
+        return res.status(500).json({ message: 'Database connection not ready. Please try again.' });
+      }
+    } catch (err) {
+      console.error('Error connecting to MongoDB:', err);
+      return res.status(500).json({ message: 'Failed to connect to database. Please try again.' });
+    }
+  }
   next();
 });
 
@@ -63,13 +86,13 @@ const connectDB = async () => {
     }
     
     const conn = await mongoose.connect(mongoUri, {
-      serverSelectionTimeoutMS: 5000, // Reduced timeout for serverless
-      // Settings recommended for serverless environments
-      bufferCommands: false,
-      socketTimeoutMS: 30000, // Reduced timeout for serverless
+      serverSelectionTimeoutMS: 10000, // Increased timeout for serverless
+      // For serverless environments, we need to buffer commands until connection is complete
+      bufferCommands: true, // Changed to true to buffer commands until connection is established
+      socketTimeoutMS: 45000, // Increased timeout for serverless
       family: 4, // Force IPv4
-      connectTimeoutMS: 10000, // Connection timeout of 10 seconds
-      maxPoolSize: 1, // Maintain up to 1 socket connection
+      connectTimeoutMS: 15000, // Increased connection timeout for serverless
+      maxPoolSize: 10, // Increased for better performance
     });
     
     cachedDb = conn;
@@ -175,7 +198,9 @@ if (process.env.NODE_ENV !== 'production') {
 } else {
   // For Vercel serverless environment
   // Connect to MongoDB at startup on first cold start
-  // Don't wait for the connection to complete
+  // Create a connection promise that can be awaited in route handlers
+  console.log('Initializing MongoDB connection for serverless environment');
+  // We don't need to wait for the connection here, but we ensure it's initialized
   connectDB()
     .then(() => console.log('MongoDB connection initialized for serverless environment'))
     .catch(err => console.error('MongoDB connection failed in serverless environment:', err.message));

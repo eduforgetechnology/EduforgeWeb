@@ -12,7 +12,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     // Fetch enrolled courses (assuming backend has endpoint)
-    const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://eduforge-api.vercel.app';
+    const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://eduforge-web.vercel.app';
     console.log('Dashboard - API URL used:', apiUrl); // Debug logging
     axios.get(`${apiUrl}/api/courses/enrolled`)
       .then(res => setEnrolledCourses(res.data))

@@ -47,7 +47,7 @@ const Courses = () => {
 
   const loadCourses = useCallback(async (page = 1, reset = false) => {
     setLoading(true);
-    const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://eduforge-api.vercel.app';
+    const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://eduforge-web.vercel.app';
     
     try {
       const response = await axios.get(`${apiUrl}/api/courses?page=${page}&limit=12`);
@@ -175,7 +175,7 @@ const Courses = () => {
     
     setEnrolling(true);
     try {
-      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://eduforge-api.vercel.app';
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://eduforge-web.vercel.app';
       await axios.post(`${apiUrl}/api/courses/${id}/enroll`);
       
       setMessage('You have successfully enrolled in this course!');
