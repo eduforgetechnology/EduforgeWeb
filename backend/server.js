@@ -22,8 +22,18 @@ app.set('trust proxy', 1);
 
 // Configure CORS for deployment
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN || 'https://eduforge-web-frontend.vercel.app',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  origin: function(origin, callback) {
+    const allowedOrigins = (process.env.CORS_ORIGIN || '').split(',');
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.indexOf(origin + '/') !== -1) {
+      return callback(null, true);
+    } else {
+      console.log(`Origin ${origin} not allowed by CORS`);
+      return callback(null, true); // Allow all origins temporarily for debugging
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true,
   optionsSuccessStatus: 204
 };
