@@ -8,7 +8,6 @@
     "dev": "nodemon server.js",
     "prod": "NODE_ENV=production node server.js",
     "seed": "node seed.js",
-    "test": "node test-api.js",
     "build": "node build.js"
   },
   "keywords": ["elearning", "education", "api"],

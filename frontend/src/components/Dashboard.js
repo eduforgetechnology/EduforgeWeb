@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState, useMemo } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
-import { Container, Row, Col, Card, Button, Alert, ProgressBar } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Alert } from 'react-bootstrap';
 import { motion } from 'framer-motion';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -12,7 +12,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     // Fetch enrolled courses (assuming backend has endpoint)
-    const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
+    const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://eduforge-api.vercel.app';
     console.log('Dashboard - API URL used:', apiUrl); // Debug logging
     axios.get(`${apiUrl}/api/courses/enrolled`)
       .then(res => setEnrolledCourses(res.data))

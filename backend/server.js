@@ -22,7 +22,7 @@ app.set('trust proxy', 1);
 
 // Configure CORS for deployment
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN || 'https://eduforge-web.vercel.app',
+  origin: process.env.CORS_ORIGIN ,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
   optionsSuccessStatus: 204
@@ -40,7 +40,7 @@ app.use((req, res, next) => {
 });
 
 // MongoDB connection with better error handling
-const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/elearning';
+const mongoUri = process.env.MONGODB_URI;
 if (!mongoUri) {
   console.error('FATAL: MongoDB URI is not defined. Set MONGODB_URI environment variable.');
   process.exit(1);
@@ -63,10 +63,10 @@ const connectDB = async () => {
     }
     
     const conn = await mongoose.connect(mongoUri, {
-      serverSelectionTimeoutMS: 10000, // Increased timeout to 10s
+      serverSelectionTimeoutMS: 5000, // Reduced timeout for serverless
       // Settings recommended for serverless environments
       bufferCommands: false,
-      socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+      socketTimeoutMS: 30000, // Reduced timeout for serverless
       family: 4, // Force IPv4
       connectTimeoutMS: 10000, // Connection timeout of 10 seconds
       maxPoolSize: 1, // Maintain up to 1 socket connection
@@ -191,6 +191,13 @@ process.on('unhandledRejection', (err) => {
   console.error('Unhandled rejection:', err);
   // Don't exit process in serverless environment
 });
+
+// Set MongoDB connection options for serverless environment
+const serverlessMongoOptions = {
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 30000,
+  connectTimeoutMS: 10000
+};
 
 // Export the Express app for Vercel
 module.exports = app;

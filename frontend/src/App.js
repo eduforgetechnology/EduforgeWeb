@@ -1,6 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
+import React, { useContext } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthContext } from './context/AuthContext';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
@@ -18,7 +17,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
 function App() {
-  const { user, logout } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   return (
     <Router>

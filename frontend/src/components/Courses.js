@@ -1,8 +1,10 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import React, { useEffect, useState, useContext, useRef, useCallback } from 'react';
 import axios from 'axios';
 import { Container, Row, Col, Card, Button, Alert, Modal, Form, Badge, Spinner, InputGroup, Dropdown, DropdownButton } from 'react-bootstrap';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AuthContext } from '../context/AuthContext';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
@@ -16,11 +18,14 @@ const Courses = () => {
   const [filter, setFilter] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
   const [categories, setCategories] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const { user } = useContext(AuthContext);
   const courseRef = useRef(null);
 
   // Categories for filtering (in real app, these would come from backend)
-  const courseCategories = [
+  const predefinedCategories = [
     'All', 
     'Development', 
     'Business', 
@@ -40,139 +45,137 @@ const Courses = () => {
     }
   }, [courses]);
 
-  useEffect(() => {
+  const loadCourses = useCallback(async (page = 1, reset = false) => {
     setLoading(true);
-    const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
+    const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://eduforge-api.vercel.app';
     
-    axios.get(`${apiUrl}/api/courses`)
-      .then(res => {
-        // Add categories based on course content/title
-        const coursesWithCategories = res.data.map((course, index) => {
-          if (!course.category) {
-            // Determine category based on course title
-            let category;
-            const title = course.title?.toLowerCase() || "";
-            
-            if (title.includes("javascript") || 
-                title.includes("node") || 
-                title.includes("react") || 
-                title.includes("angular") || 
-                title.includes("vue") || 
-                title.includes("python") || 
-                title.includes("java") || 
-                title.includes("c++") || 
-                title.includes("programming")) {
-              category = "Development";
-            } 
-            else if (title.includes("marketing") ||
-                     title.includes("seo") ||
-                     title.includes("social media")) {
-              category = "Marketing";
-            }
-            else if (title.includes("design") ||
-                     title.includes("ui") ||
-                     title.includes("ux") ||
-                     title.includes("photoshop") ||
-                     title.includes("illustrator")) {
-              category = "Design";
-            }
-            else if (title.includes("business") ||
-                     title.includes("management") ||
-                     title.includes("leadership") ||
-                     title.includes("entrepreneur")) {
-              category = "Business";
-            }
-            else if (title.includes("photo") ||
-                     title.includes("camera")) {
-              category = "Photography";
-            }
-            else if (title.includes("music") ||
-                     title.includes("guitar") ||
-                     title.includes("piano")) {
-              category = "Music";
-            }
-            else if (title.includes("health") ||
-                     title.includes("fitness") ||
-                     title.includes("yoga")) {
-              category = "Health & Fitness";
-            }
-            else {
-              category = "Personal Growth";
-            }
-            
-            return {
-              ...course, 
-              category: category,
-              rating: (3 + Math.random() * 2).toFixed(1),
-              students: Math.floor(Math.random() * 1000) + 50,
-              level: ['Beginner', 'Intermediate', 'Advanced'][index % 3]
-            };
+    try {
+      const response = await axios.get(`${apiUrl}/api/courses?page=${page}&limit=12`);
+      const { courses: newCourses, currentPage, totalPages: totalPgs } = response.data;
+      
+      // Process categories on the client side (this is much faster than before)
+      const processedCourses = newCourses.map((course, index) => {
+        if (!course.category) {
+          // Simpler category detection
+          const title = course.title?.toLowerCase() || "";
+          let category = "Personal Growth"; // Default category
+          
+          // Simplified category logic
+          if (title.match(/javascript|node|react|angular|vue|python|java|c\+\+|programming/)) {
+            category = "Development";
+          } else if (title.match(/marketing|seo|social media/)) {
+            category = "Marketing";
+          } else if (title.match(/design|ui|ux|photoshop/)) {
+            category = "Design";
+          } else if (title.match(/business|management|leadership/)) {
+            category = "Business";
           }
-          return course;
-        });
-        
-        setCourses(coursesWithCategories);
-        setFilteredCourses(coursesWithCategories);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Error loading courses:', err);
-        setMessage('Error loading courses. Please try again later.');
-        setLoading(false);
+          
+          return {
+            ...course,
+            category,
+            rating: course.rating || "4.5",
+            students: course.students?.length || 75,
+            level: course.level || ['Beginner', 'Intermediate', 'Advanced'][index % 3]
+          };
+        }
+        return course;
       });
+      
+      if (reset) {
+        setCourses(processedCourses);
+      } else {
+        setCourses(prevCourses => [...prevCourses, ...processedCourses]);
+      }
+      
+      setTotalPages(totalPgs);
+      setCurrentPage(currentPage);
+      setHasMore(currentPage < totalPgs);
+      setLoading(false);
+    } catch (err) {
+      console.error('Error loading courses:', err);
+      setMessage('Error loading courses. Please try again later.');
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
-    // Apply filters and search
-    let result = [...courses];
+    loadCourses(1, true);
     
-    // Apply search term
-    if (searchTerm) {
-      result = result.filter(course => 
-        course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.educator.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+    // Cache cleanup when component unmounts
+    return () => {
+      setCourses([]);
+      setFilteredCourses([]);
+    };
+  }, [loadCourses]);
+
+  // Debounce search to avoid excessive filtering
+  const debounce = (func, wait) => {
+    let timeout;
+    return (...args) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+  };
+  
+  const handleSearchChange = useCallback(
+    debounce((value) => {
+      setSearchTerm(value);
+    }, 300),
+    []
+  );
+  
+  // Memoize filtering to improve performance
+  useEffect(() => {
+    // Only filter on the client side if we're not loading more data
+    if (!loading) {
+      // Apply filters and search more efficiently
+      const result = courses.filter(course => {
+        // Filter by search term
+        const matchesSearch = !searchTerm || 
+          course.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          course.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          course.educator?.name?.toLowerCase().includes(searchTerm.toLowerCase());
+          
+        // Filter by category
+        const matchesCategory = !filter || filter === 'all' || filter === 'All' || 
+          course.category === filter;
+          
+        return matchesSearch && matchesCategory;
+      });
+      
+      // Apply sorting
+      let sortedResults = [...result];
+      switch(sortBy) {
+        case 'newest':
+          sortedResults.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+          break;
+        case 'oldest':
+          sortedResults.sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
+          break;
+        case 'name_asc':
+          sortedResults.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+          break;
+        case 'name_desc':
+          sortedResults.sort((a, b) => (b.title || '').localeCompare(a.title || ''));
+          break;
+        case 'popular':
+          sortedResults.sort((a, b) => (b.students || 0) - (a.students || 0));
+          break;
+        default:
+          break;
+      }
+      
+      setFilteredCourses(sortedResults);
     }
-    
-    // Apply category filter
-    if (filter && filter !== 'all' && filter !== 'All') {
-      result = result.filter(course => 
-        course.category === filter
-      );
-    }
-    
-    // Apply sorting
-    switch(sortBy) {
-      case 'newest':
-        // Assuming _id is a MongoDB ObjectId which contains a timestamp
-        result.sort((a, b) => b._id.localeCompare(a._id));
-        break;
-      case 'oldest':
-        result.sort((a, b) => a._id.localeCompare(b._id));
-        break;
-      case 'name_asc':
-        result.sort((a, b) => a.title.localeCompare(b.title));
-        break;
-      case 'name_desc':
-        result.sort((a, b) => b.title.localeCompare(a.title));
-        break;
-      case 'popular':
-        result.sort((a, b) => (b.students || 0) - (a.students || 0));
-        break;
-      default:
-        break;
-    }
-    
-    setFilteredCourses(result);
-  }, [searchTerm, filter, sortBy, courses]);
+  }, [searchTerm, filter, sortBy, courses, loading]);
 
   const handleEnroll = async (id) => {
     if (enrolling) return;
     
     setEnrolling(true);
     try {
-      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
+      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://eduforge-api.vercel.app';
       await axios.post(`${apiUrl}/api/courses/${id}/enroll`);
       
       setMessage('You have successfully enrolled in this course!');
@@ -222,19 +225,19 @@ const Courses = () => {
   };
 
   const courseCardVariants = {
-    hidden: { opacity: 0, y: 50 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 12
+        type: "tween",
+        ease: "easeOut",
+        duration: 0.4
       }
     },
     exit: {
       opacity: 0,
-      y: -20,
+      y: -10,
       transition: {
         duration: 0.3
       }
@@ -298,8 +301,8 @@ const Courses = () => {
                       size="lg"
                       type="text"
                       placeholder="What do you want to learn today?"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
+                      defaultValue={searchTerm}
+                      onChange={(e) => handleSearchChange(e.target.value)}
                       aria-label="Search courses"
                     />
                     <Button variant="light">
@@ -409,7 +412,7 @@ const Courses = () => {
 
         {/* Course Listings */}
         <Row>
-          {loading ? (
+          {loading && currentPage === 1 ? (
             renderSkeletons()
           ) : filteredCourses.length > 0 ? (
             <motion.div
@@ -563,6 +566,28 @@ const Courses = () => {
             </Col>
           )}
         </Row>
+        
+        {/* Load More Button */}
+        {filteredCourses.length > 0 && hasMore && (
+          <div className="text-center mt-4 mb-5">
+            <Button 
+              variant="outline-primary" 
+              size="lg" 
+              onClick={() => loadCourses(currentPage + 1)} 
+              disabled={loading}
+              className="px-5"
+            >
+              {loading ? (
+                <>
+                  <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" className="me-2" />
+                  Loading...
+                </>
+              ) : (
+                'Load More Courses'
+              )}
+            </Button>
+          </div>
+        )}
       </Container>
 
       {/* Course Details Modal */}
@@ -573,11 +598,13 @@ const Courses = () => {
         <Modal.Body>
           <Row>
             <Col md={6} className="mb-3">
-              <img
+              <LazyLoadImage
                 src={selectedCourse?.imageUrl || `https://source.unsplash.com/600x400/?education,${selectedCourse?._id}`}
                 alt={selectedCourse?.title}
+                effect="blur"
                 className="img-fluid rounded mb-3 w-100"
                 style={{ maxHeight: '300px', objectFit: 'cover' }}
+                placeholderSrc="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23cccccc'/%3E%3C/svg%3E"
               />
               
               <div className="d-flex justify-content-between align-items-center mb-3">

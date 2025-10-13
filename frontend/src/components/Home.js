@@ -9,7 +9,7 @@ const Home = () => {
   const { user } = useContext(AuthContext);
   const [featuredCourses, setFeaturedCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [stats, setStats] = useState({
+  const [stats] = useState({
     students: 15000,
     courses: 120,
     instructors: 85,
@@ -29,7 +29,7 @@ const Home = () => {
 
   useEffect(() => {
     // Use environment variable with fallback to ensure API works even if env isn't loaded
-    const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
+    const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://eduforge-api.vercel.app';
     setIsLoading(true);
     
     axios.get(`${apiUrl}/api/courses`)

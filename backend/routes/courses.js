@@ -6,8 +6,23 @@ const { protect } = require('../middleware/auth');
 // @route GET /api/courses
 router.get('/', async (req, res) => {
   try {
-    const courses = await Course.find().populate('educator', 'name');
-    res.json(courses);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 12;
+    const skip = (page - 1) * limit;
+    
+    const totalCourses = await Course.countDocuments();
+    const courses = await Course.find()
+      .populate('educator', 'name')
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    res.json({
+      courses,
+      currentPage: page,
+      totalPages: Math.ceil(totalCourses / limit),
+      totalCourses
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
