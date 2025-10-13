@@ -1,0 +1,14 @@
+# https://www.robotstxt.org/robotstxt.html
+# EduForge Learning Platform
+User-agent: *
+Allow: /
+
+# Optimize crawling rate
+Crawl-delay: 10
+
+# Sitemap location
+Sitemap: https://eduforge.co/sitemap.xml
+
+# Prevent access to API endpoints
+Disallow: /api/
+Disallow: /*.json$

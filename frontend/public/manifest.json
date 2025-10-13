@@ -1,0 +1,63 @@
+{
+  "short_name": "EduForge",
+  "name": "EduForge Learning Platform",
+  "description": "Transform your future with expert-led online learning in technology, business, design and more",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "eduforge-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "eduforge-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/?source=pwa",
+  "id": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "any",
+  "theme_color": "#4263eb",
+  "background_color": "#ffffff",
+  "categories": ["education", "productivity", "learning"],
+  "screenshots": [
+    {
+      "src": "screenshot1.webp",
+      "sizes": "1280x720",
+      "type": "image/webp",
+      "platform": "wide",
+      "label": "EduForge Course Dashboard"
+    },
+    {
+      "src": "screenshot2.webp",
+      "sizes": "1280x720",
+      "type": "image/webp",
+      "platform": "wide", 
+      "label": "EduForge Learning Experience"
+    },
+    {
+      "src": "screenshot-mobile1.webp",
+      "sizes": "720x1280",
+      "type": "image/webp",
+      "platform": "narrow",
+      "label": "Mobile Course View"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": ["focus-existing", "auto"]
+  }
+}
