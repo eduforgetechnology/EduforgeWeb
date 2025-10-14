@@ -336,11 +336,17 @@
 .nav-link-logout {
   cursor: pointer;
   color: rgba(255, 255, 255, 0.8) !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .nav-link-logout:hover,
 .nav-link-logout:focus {
   color: var(--danger-color) !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .user-avatar {
@@ -684,29 +690,7 @@
   color: var(--accent-color);
 }
 
-.scroll-to-top {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  width: 45px;
-  height: 45px;
-  background: var(--primary-gradient);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 99;
-  box-shadow: var(--shadow-md);
-  transition: all var(--transition-fast);
-}
 
-.scroll-to-top:hover {
-  background: var(--primary-dark);
-  box-shadow: var(--shadow-lg);
-}
 
 /* Comprehensive Footer Responsive Styles */
 

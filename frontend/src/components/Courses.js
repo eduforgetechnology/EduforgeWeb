@@ -528,9 +528,9 @@ const Courses = () => {
                               variant="primary" 
                               onClick={() => handleEnroll(course._id)}
                               className="flex-grow-1"
-                              disabled={enrolling}
+                              disabled={enrollingCourses.has(course._id)}
                             >
-                              {enrolling ? (
+                              {enrollingCourses.has(course._id) ? (
                                 <>
                                   <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
                                   <span className="ms-2">Enrolling...</span>
@@ -716,7 +716,7 @@ const Courses = () => {
                 handleEnroll(selectedCourse._id);
                 handleCloseModal();
               }}
-              disabled={enrolling}
+              disabled={enrollingCourses.has(selectedCourse._id)}
             >
               <i className="fas fa-graduation-cap me-2"></i>
               {enrollingCourses.has(selectedCourse._id) ? 'Enrolling...' : 'Enroll Now'}

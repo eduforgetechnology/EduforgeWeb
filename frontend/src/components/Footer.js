@@ -248,18 +248,7 @@ const Footer = () => {
         </Container>
       </div>
       
-      <motion.button 
-        onClick={scrollToTop}
-        className="scroll-to-top"
-        aria-label="Scroll to top"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.3 }}
-      >
-        <FaChevronUp />
-      </motion.button>
+
     </footer>
   );
 };
