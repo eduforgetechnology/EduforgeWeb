@@ -14,7 +14,7 @@ const Courses = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [enrolling, setEnrolling] = useState(false);
+  const [enrollingCourses, setEnrollingCourses] = useState(new Set());
   const [filter, setFilter] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
   const [categories, setCategories] = useState([]);
@@ -171,9 +171,9 @@ const Courses = () => {
   }, [searchTerm, filter, sortBy, courses, loading]);
 
   const handleEnroll = async (id) => {
-    if (enrolling) return;
+    if (enrollingCourses.has(id)) return;
     
-    setEnrolling(true);
+    setEnrollingCourses(prev => new Set([...prev, id]));
     try {
       const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://eduforge-web.vercel.app';
       await axios.post(`${apiUrl}/api/courses/${id}/enroll`);
@@ -192,7 +192,11 @@ const Courses = () => {
       console.error('Error enrolling in course:', err);
       setMessage(err.response?.data?.message || 'Error enrolling in course. Please try again.');
     } finally {
-      setEnrolling(false);
+      setEnrollingCourses(prev => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
     }
   };
 
@@ -715,7 +719,7 @@ const Courses = () => {
               disabled={enrolling}
             >
               <i className="fas fa-graduation-cap me-2"></i>
-              {enrolling ? 'Enrolling...' : 'Enroll Now'}
+              {enrollingCourses.has(selectedCourse._id) ? 'Enrolling...' : 'Enroll Now'}
             </Button>
           )}
           {user && user.role === 'student' && selectedCourse && selectedCourse.enrolled && (
