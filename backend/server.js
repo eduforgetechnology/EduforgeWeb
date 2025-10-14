@@ -42,13 +42,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Add database connection status middleware
-app.use((req, res, next) => {
-  if (mongoose.connection.readyState !== 1) {
-    console.error('Database not connected. Current state:', mongoose.connection.readyState);
-    return res.status(503).json({ message: 'Database connection not ready' });
-  }
-  next();
-});
+// Remove the database check middleware as we'll handle connection before starting the server
 
 // Add security headers
 app.use((req, res, next) => {
@@ -81,7 +75,7 @@ app.use(async (req, res, next) => {
   next();
 });
 
-// MongoDB connection with better error handling
+// MongoDB connection with better error handling and retries
 const mongoUri = process.env.MONGODB_URI;
 if (!mongoUri) {
   console.error('FATAL: MongoDB URI is not defined. Set MONGODB_URI environment variable.');
@@ -91,11 +85,34 @@ if (!mongoUri) {
 // Global variable to cache the database connection
 let cachedDb = null;
 
-// Connect to MongoDB with retry logic - optimized for serverless
-const connectDB = async () => {
+// Connect to MongoDB with retry logic
+const connectDB = async (retries = 5) => {
   if (cachedDb && mongoose.connection.readyState === 1) {
     console.log('Using cached database connection');
     return true;
+  }
+
+  try {
+    console.log('Attempting to connect to MongoDB...');
+    const options = {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    };
+
+    await mongoose.connect(mongoUri, options);
+    cachedDb = mongoose.connection;
+    console.log('MongoDB connected successfully');
+    return true;
+  } catch (error) {
+    console.error('MongoDB connection error:', error);
+    if (retries > 0) {
+      console.log(`Retrying connection... (${retries} attempts remaining)`);
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      return connectDB(retries - 1);
+    }
+    throw error;
   }
 
   try {
@@ -216,11 +233,30 @@ if (process.env.NODE_ENV !== 'production') {
   });
 } else {
   // For Vercel serverless environment
-  // Connect to MongoDB at startup on first cold start
-  // Create a connection promise that can be awaited in route handlers
-  console.log('Initializing MongoDB connection for serverless environment');
-  // We don't need to wait for the connection here, but we ensure it's initialized
-  connectDB()
+  let connectionPromise = null;
+
+  // Connection initializer function
+  const initializeConnection = async () => {
+    if (!connectionPromise) {
+      console.log('Initializing new MongoDB connection');
+      connectionPromise = connectDB();
+    }
+    return connectionPromise;
+  };
+
+  // Middleware to ensure DB connection for each request
+  app.use(async (req, res, next) => {
+    try {
+      await initializeConnection();
+      next();
+    } catch (error) {
+      console.error('Failed to connect to MongoDB:', error);
+      res.status(503).json({ message: 'Database connection failed. Please try again.' });
+    }
+  });
+
+  // Initialize connection on cold start
+  initializeConnection()
     .then(() => console.log('MongoDB connection initialized for serverless environment'))
     .catch(err => console.error('MongoDB connection failed in serverless environment:', err.message));
 }
