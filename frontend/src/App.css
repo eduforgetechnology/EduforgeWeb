@@ -31,7 +31,7 @@ body {
 
 .main-content {
   flex: 1;
-  padding-top: 80px;
+  padding-top: 70px;
   padding-bottom: 2rem;
 }
 
@@ -44,19 +44,19 @@ body {
 
 @media (max-width: 576px) {
   .main-content {
-    padding-top: 60px;
+    padding-top: 70px;
   }
 }
 
 @media (max-width: 480px) {
   .main-content {
-    padding-top: 55px;
+    padding-top: 70px;
   }
 }
 
 @media (max-width: 597px) {
   .main-content {
-    padding-top: 65px;
+    padding-top: 70px;
   }
 }
 

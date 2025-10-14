@@ -80,7 +80,7 @@ const Navigation = () => {
               <div className="logo-icon">
                 <span>E</span>
               </div>
-              <div className="brand-text ms-2 d-none d-sm-block">EduForge</div>
+    <div className="brand-text ms-2">EduForge</div>
             </div>
           </Navbar.Brand>
         </div>

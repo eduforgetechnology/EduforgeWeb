@@ -5,6 +5,7 @@
   padding: 1rem 0;
   box-shadow: var(--shadow-md);
   z-index: 1000;
+  height: 70px;
 }
 
 .navbar-scrolled {
@@ -147,7 +148,7 @@
 
   .brand-text {
     font-size: 1rem;
-    display: none; /* Hide text on very small screens */
+    display: block !important;
   }
 
   .logo-icon {
