@@ -6,17 +6,24 @@ const { protect } = require('../middleware/auth');
 // @route GET /api/courses
 router.get('/', async (req, res) => {
   try {
+    console.log('Received request for courses');
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 12;
     const skip = (page - 1) * limit;
     
+    console.log(`Fetching courses with limit: ${limit}, skip: ${skip}`);
+    
     const totalCourses = await Course.countDocuments();
+    console.log(`Total courses in database: ${totalCourses}`);
+    
     const courses = await Course.find()
       .populate('educator', 'name')
       .skip(skip)
       .limit(limit)
       .lean();
 
+    console.log(`Found ${courses.length} courses`);
+    
     res.json({
       courses,
       currentPage: page,

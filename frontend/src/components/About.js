@@ -57,6 +57,7 @@ const About = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1, duration: 1 }}
+                className="mb-4"
               >
                 <Button variant="light" size="lg" className="text-primary fw-bold bg-white">Learn More</Button>
               </motion.div>

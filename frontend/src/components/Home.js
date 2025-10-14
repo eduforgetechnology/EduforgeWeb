@@ -32,13 +32,23 @@ const Home = () => {
     const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://eduforge-web.vercel.app';
     setIsLoading(true);
     
-    axios.get(`${apiUrl}/api/courses`)
+    axios.get(`${apiUrl}/api/courses`, {
+        params: {
+          limit: 3 // Request only 3 courses from the backend
+        }
+      })
       .then(res => {
-        setFeaturedCourses(res.data.slice(0, 3)); // Show first 3 courses
+        if (res.data && res.data.courses) {
+          setFeaturedCourses(res.data.courses);
+        } else {
+          console.error('Unexpected API response format:', res.data);
+          setFeaturedCourses([]);
+        }
         setIsLoading(false);
       })
       .catch(err => {
         console.error('Error fetching courses:', err);
+        setFeaturedCourses([]);
         setIsLoading(false);
       });
   }, []);
@@ -376,22 +386,24 @@ const Home = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.6 }}
+            className="cta-buttons-container"
           >
-            <Button 
-              as={Link} 
-              to={user ? "/courses" : "/login"} 
-              variant="light" 
+            <Button
+              as={Link}
+              to={user ? "/courses" : "/login"}
+              variant="light"
               size="lg"
-              className="pulse me-3"
+              className="cta-button pulse"
             >
               <i className="fas fa-rocket me-2"></i>
               {user ? "Explore All Courses" : "Sign Up Now"}
             </Button>
-            <Button 
-              as={Link} 
-              to="/contact" 
-              variant="outline-light" 
+            <Button
+              as={Link}
+              to="/contact"
+              variant="outline-light"
               size="lg"
+              className="cta-button"
             >
               <i className="fas fa-envelope me-2"></i>
               Contact Us

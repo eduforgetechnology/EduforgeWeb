@@ -39,7 +39,7 @@ const Dashboard = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Row className="mb-4">
+        <Row className="mb-4 dashboard-header">
           <Col md={8}>
             <h1 className="display-4">Welcome back, {user?.name}!</h1>
             <p className="lead">Track your learning progress and explore new courses.</p>
@@ -58,8 +58,8 @@ const Dashboard = () => {
       </motion.div>
 
       {/* Stats Cards */}
-      <Row className="mb-4">
-        <Col md={3}>
+      <Row className="mb-4 dashboard-stats">
+        <Col md={3} sm={6}>
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -73,7 +73,7 @@ const Dashboard = () => {
             </Card>
           </motion.div>
         </Col>
-        <Col md={3}>
+        <Col md={3} sm={6}>
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -87,7 +87,7 @@ const Dashboard = () => {
             </Card>
           </motion.div>
         </Col>
-        <Col md={3}>
+        <Col md={3} sm={6}>
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -101,7 +101,7 @@ const Dashboard = () => {
             </Card>
           </motion.div>
         </Col>
-        <Col md={3}>
+        <Col md={3} sm={6}>
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -166,20 +166,20 @@ const Dashboard = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.4 + index * 0.1, duration: 0.5 }}
               >
-                <Card className="mb-3 shadow">
+                <Card className="mb-3 shadow dashboard-course-card">
                   <Card.Body>
                     <Row>
                       <Col md={2} className="d-flex align-items-center justify-content-center">
-                        <div 
+                        <div
                           className="course-icon d-flex align-items-center justify-content-center"
-                          style={{ 
-                            width: "60px", 
-                            height: "60px", 
-                            borderRadius: "12px", 
-                            background: index % 3 === 0 
-                              ? 'linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%)' 
-                              : index % 3 === 1 
-                                ? 'linear-gradient(135deg, #3B82F6 0%, #2DD4BF 100%)' 
+                          style={{
+                            width: "60px",
+                            height: "60px",
+                            borderRadius: "12px",
+                            background: index % 3 === 0
+                              ? 'linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%)'
+                              : index % 3 === 1
+                                ? 'linear-gradient(135deg, #3B82F6 0%, #2DD4BF 100%)'
                                 : 'linear-gradient(135deg, #F59E0B 0%, #EF4444 100%)'
                           }}
                         >

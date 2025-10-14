@@ -41,6 +41,15 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Add database connection status middleware
+app.use((req, res, next) => {
+  if (mongoose.connection.readyState !== 1) {
+    console.error('Database not connected. Current state:', mongoose.connection.readyState);
+    return res.status(503).json({ message: 'Database connection not ready' });
+  }
+  next();
+});
+
 // Add security headers
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');

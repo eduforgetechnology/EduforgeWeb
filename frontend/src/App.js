@@ -14,6 +14,7 @@ import Contact from './components/Contact';
 import Dashboard from './components/Dashboard';
 import AIAssistant from './components/AIAssistant';
 import ProtectedRoute from './components/ProtectedRoute';
+import ScrollToTop from './components/ScrollToTop';
 import './App.css';
 
 function App() {
@@ -21,9 +22,10 @@ function App() {
 
   return (
     <Router>
+      <ScrollToTop />
       <div className="App">
         <Navigation />
-        
+
         <div className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />

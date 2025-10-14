@@ -85,13 +85,13 @@ const Navigation = () => {
           </Navbar.Brand>
         </div>
 
-        {/* Login button outside of menu for non-logged in users */}
+        {/* Login button for non-logged in users */}
         {!user && (
-          <div className="d-flex align-items-center me-3">
-            <Button 
-              as={Link} 
+          <div className="d-flex align-items-center ms-auto">
+            <Button
+              as={Link}
               to="/login"
-              variant="primary" 
+              variant="primary"
               className="login-button"
             >
               <FaUser className="me-2" /> Login
@@ -99,161 +99,173 @@ const Navigation = () => {
           </div>
         )}
 
-        <Navbar.Toggle aria-controls="basic-navbar-nav" className="ms-auto">
-          <FaBars />
-        </Navbar.Toggle>
-        
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mx-auto">
-            <motion.div 
-              variants={navItemVariants}
-              initial="hidden"
-              animate="visible"
-              whileHover="hover"
-            >
-              <Nav.Link 
-                as={Link} 
-                to="/" 
-                className={isActive('/') ? 'active-nav-link' : ''}
-              >
-                <FaHome className="nav-icon" /> 
-                <span>Home</span>
-              </Nav.Link>
-            </motion.div>
+        {/* Menu toggle and collapse only for logged in users */}
+        {user && (
+          <>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" className="ms-auto">
+              <FaBars />
+            </Navbar.Toggle>
 
-            {user && (
-              <>
-                <motion.div 
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav className="mx-auto">
+                <motion.div
                   variants={navItemVariants}
                   initial="hidden"
                   animate="visible"
                   whileHover="hover"
                 >
-                  <Nav.Link 
-                    as={Link} 
+                  <Nav.Link
+                    as={Link}
+                    to="/"
+                    className={isActive('/') ? 'active-nav-link' : ''}
+                    onClick={() => setExpanded(false)}
+                  >
+                    <FaHome className="nav-icon" />
+                    <span>Home</span>
+                  </Nav.Link>
+                </motion.div>
+
+                <motion.div
+                  variants={navItemVariants}
+                  initial="hidden"
+                  animate="visible"
+                  whileHover="hover"
+                >
+                  <Nav.Link
+                    as={Link}
                     to="/courses"
                     className={isActive('/courses') ? 'active-nav-link' : ''}
+                    onClick={() => setExpanded(false)}
                   >
-                    <FaBook className="nav-icon" /> 
+                    <FaBook className="nav-icon" />
                     <span>Courses</span>
                   </Nav.Link>
                 </motion.div>
 
-                <motion.div 
+                <motion.div
                   variants={navItemVariants}
                   initial="hidden"
                   animate="visible"
                   whileHover="hover"
                 >
-                  <Nav.Link 
-                    as={Link} 
+                  <Nav.Link
+                    as={Link}
                     to="/educators"
                     className={isActive('/educators') ? 'active-nav-link' : ''}
+                    onClick={() => setExpanded(false)}
                   >
-                    <FaUsers className="nav-icon" /> 
+                    <FaUsers className="nav-icon" />
                     <span>Educators</span>
                   </Nav.Link>
                 </motion.div>
 
-                <motion.div 
+                <motion.div
                   variants={navItemVariants}
                   initial="hidden"
                   animate="visible"
                   whileHover="hover"
                 >
-                  <Nav.Link 
-                    as={Link} 
+                  <Nav.Link
+                    as={Link}
                     to="/tuitions"
                     className={isActive('/tuitions') ? 'active-nav-link' : ''}
+                    onClick={() => setExpanded(false)}
                   >
-                    <FaMoneyBill className="nav-icon" /> 
+                    <FaMoneyBill className="nav-icon" />
                     <span>Tuitions</span>
                   </Nav.Link>
                 </motion.div>
 
-                <motion.div 
+                <motion.div
                   variants={navItemVariants}
                   initial="hidden"
                   animate="visible"
                   whileHover="hover"
                 >
-                  <Nav.Link 
-                    as={Link} 
+                  <Nav.Link
+                    as={Link}
                     to="/competitions"
                     className={isActive('/competitions') ? 'active-nav-link' : ''}
+                    onClick={() => setExpanded(false)}
                   >
-                    <FaTrophy className="nav-icon" /> 
+                    <FaTrophy className="nav-icon" />
                     <span>Competitions</span>
                   </Nav.Link>
                 </motion.div>
 
-                <motion.div 
+                <motion.div
                   variants={navItemVariants}
                   initial="hidden"
                   animate="visible"
                   whileHover="hover"
                 >
-                  <Nav.Link 
-                    as={Link} 
+                  <Nav.Link
+                    as={Link}
                     to="/about"
                     className={isActive('/about') ? 'active-nav-link' : ''}
+                    onClick={() => setExpanded(false)}
                   >
-                    <FaInfo className="nav-icon" /> 
+                    <FaInfo className="nav-icon" />
                     <span>About</span>
                   </Nav.Link>
                 </motion.div>
 
-                <motion.div 
+                <motion.div
                   variants={navItemVariants}
                   initial="hidden"
                   animate="visible"
                   whileHover="hover"
                 >
-                  <Nav.Link 
-                    as={Link} 
+                  <Nav.Link
+                    as={Link}
                     to="/contact"
                     className={isActive('/contact') ? 'active-nav-link' : ''}
+                    onClick={() => setExpanded(false)}
                   >
-                    <FaEnvelope className="nav-icon" /> 
+                    <FaEnvelope className="nav-icon" />
                     <span>Contact</span>
                   </Nav.Link>
                 </motion.div>
 
                 {/* Add Dashboard and Logout to the main navigation */}
-                <motion.div 
+                <motion.div
                   variants={navItemVariants}
                   initial="hidden"
                   animate="visible"
                   whileHover="hover"
                 >
-                  <Nav.Link 
-                    as={Link} 
+                  <Nav.Link
+                    as={Link}
                     to="/dashboard"
                     className={isActive('/dashboard') ? 'active-nav-link' : ''}
+                    onClick={() => setExpanded(false)}
                   >
-                    <FaUser className="nav-icon" /> 
+                    <FaUser className="nav-icon" />
                     <span>Dashboard</span>
                   </Nav.Link>
                 </motion.div>
 
-                <motion.div 
+                <motion.div
                   variants={navItemVariants}
                   initial="hidden"
                   animate="visible"
                   whileHover="hover"
                 >
-                  <Nav.Link 
-                    onClick={logout}
+                  <Nav.Link
+                    onClick={() => {
+                      logout();
+                      setExpanded(false);
+                    }}
                     className="nav-link-logout"
                   >
-                    <FaSignOutAlt className="nav-icon" /> 
+                    <FaSignOutAlt className="nav-icon" />
                     <span>Logout</span>
                   </Nav.Link>
                 </motion.div>
-              </>
-            )}
-          </Nav>
-        </Navbar.Collapse>
+              </Nav>
+            </Navbar.Collapse>
+          </>
+        )}
       </Container>
     </Navbar>
   );
