@@ -13,6 +13,7 @@ import About from './components/About';
 import Contact from './components/Contact';
 import Dashboard from './components/Dashboard';
 import AIAssistant from './components/AIAssistant';
+import CourseDetails from './components/CourseDetails';
 import ProtectedRoute from './components/ProtectedRoute';
 import ScrollToTop from './components/ScrollToTop';
 import './App.css';
@@ -31,6 +32,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
+            <Route path="/courses/:courseId" element={<ProtectedRoute><CourseDetails /></ProtectedRoute>} />
             <Route path="/educators" element={<ProtectedRoute><Educators /></ProtectedRoute>} />
             <Route path="/tuitions" element={<ProtectedRoute><Tuitions /></ProtectedRoute>} />
             <Route path="/competitions" element={<ProtectedRoute><Competitions /></ProtectedRoute>} />
