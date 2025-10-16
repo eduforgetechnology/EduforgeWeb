@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const About = () => {
   const team = [
@@ -43,7 +44,7 @@ const About = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.5, duration: 1 }}
               >
-                About E-Learning Platform
+                About EduForge Platform
               </motion.h1>
               <motion.p
                 className="lead text-white"
@@ -51,7 +52,7 @@ const About = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.7, duration: 1 }}
               >
-                Empowering learners worldwide with innovative, accessible, and personalized education solutions.
+                EduForge is a dynamic learning platform dedicated to empowering students with the skills and knowledge they need to thrive in a technology-driven world.
               </motion.p>
               <motion.div
                 initial={{ opacity: 0 }}
@@ -59,7 +60,10 @@ const About = () => {
                 transition={{ delay: 1, duration: 1 }}
                 className="mb-4"
               >
-                <Button variant="light" size="lg" className="text-primary fw-bold bg-white">Learn More</Button>
+                <Button variant="light" size="lg" className="text-primary fw-bold bg-white me-3">Learn More</Button>
+                <Link to="/contact">
+                  <Button variant="outline-light" size="lg">Send Message</Button>
+                </Link>
               </motion.div>
             </Col>
             <Col md={6}>
@@ -88,8 +92,7 @@ const About = () => {
             <Col>
               <h2 className="text-center mb-4">Our Mission</h2>
               <p className="text-center lead">
-                To revolutionize education by providing cutting-edge, technology-driven learning experiences
-                that empower individuals to achieve their full potential and contribute meaningfully to society.
+               At EduForge, our mission is to make cutting-edge technology education accessible, engaging, and practical for students everywhere. We aim to inspire curiosity and creativity by providing hands-on learning experiences in fields like robotics, electronics, computer science, and emerging global technologies. By bridging the gap between traditional education and real-world innovation, we strive to empower the next generation of problem-solvers, inventors, and tech leaders to confidently shape the future.
               </p>
             </Col>
           </Row>
@@ -216,10 +219,12 @@ const About = () => {
               <Card className="shadow">
                 <Card.Body>
                   <Card.Title>Contact Us</Card.Title>
-                  <p><strong>Email:</strong> info@elearningplatform.com</p>
+                  <p><strong>Email:</strong> lokesh@eduforge.co</p>
                   <p><strong>Phone:</strong> +1 (555) 123-4567</p>
-                  <p><strong>Address:</strong> 123 Education Street, Learning City, LC 12345</p>
-                  <Button variant="primary" className="text-white">Send Message</Button>
+                  <p><strong>Address:</strong> 31, Begampur, Malviya Nagar, Delhi NCR, India, PIN 110017</p>
+               <Link to="/contact">
+                  <Button variant="primary" size="lg">Send Message</Button>
+                </Link>
                 </Card.Body>
               </Card>
             </Col>

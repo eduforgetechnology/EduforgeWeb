@@ -174,6 +174,7 @@ app.get('/api/health', async (req, res) => {
 // Main application routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/courses', require('./routes/courses'));
+app.use('/api/contact', require('./routes/contact'));
 
 // Health check endpoint
 app.get('/health', (req, res) => {

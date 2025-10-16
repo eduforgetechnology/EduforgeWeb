@@ -10,17 +10,70 @@ const Contact = () => {
     message: ''
   });
   const [message, setMessage] = useState('');
+  const [status, setStatus] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const validateForm = () => {
+    if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      return 'Please enter a valid email address';
+    }
+    if (formData.message.length < 10) {
+      return 'Message must be at least 10 characters long';
+    }
+    return null;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simulate form submission
-    setMessage('Thank you for your message! We will get back to you soon.');
-    setFormData({ name: '', email: '', subject: '', message: '' });
-    setTimeout(() => setMessage(''), 5000);
+    setIsLoading(true);
+    setStatus('');
+    setMessage('');
+
+    const validationError = validateForm();
+    if (validationError) {
+      setStatus('error');
+      setMessage(validationError);
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const baseUrl = process.env.REACT_APP_API_BASE_URL || 'https://eduforge-web.vercel.app';
+      const response = await fetch(`${baseUrl}/api/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Server error occurred');
+      }
+
+      setStatus('success');
+      setMessage('Thank you for your message! We will get back to you soon.');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+
+    } catch (error) {
+      console.error('Contact form error:', error);
+      setStatus('error');
+      setMessage(error.message || 'Failed to send message. Please try again later.');
+    } finally {
+      setIsLoading(false);
+      if (status === 'success') {
+        setTimeout(() => {
+          setMessage('');
+          setStatus('');
+        }, 5000);
+      }
+    }
   };
 
   return (
@@ -49,7 +102,11 @@ const Contact = () => {
             transition={{ duration: 0.8 }}
           >
             <Form onSubmit={handleSubmit} className="shadow p-4 rounded">
-              {message && <Alert variant="success">{message}</Alert>}
+              {message && (
+                <Alert variant={status === 'success' ? 'success' : 'danger'}>
+                  {message}
+                </Alert>
+              )}
               <Row>
                 <Col md={6}>
                   <Form.Group className="mb-3">
@@ -60,6 +117,7 @@ const Contact = () => {
                       value={formData.name}
                       onChange={handleChange}
                       required
+                      disabled={isLoading}
                     />
                   </Form.Group>
                 </Col>
@@ -72,6 +130,7 @@ const Contact = () => {
                       value={formData.email}
                       onChange={handleChange}
                       required
+                      disabled={isLoading}
                     />
                   </Form.Group>
                 </Col>
@@ -84,6 +143,7 @@ const Contact = () => {
                   value={formData.subject}
                   onChange={handleChange}
                   required
+                  disabled={isLoading}
                 />
               </Form.Group>
               <Form.Group className="mb-3">
@@ -95,10 +155,16 @@ const Contact = () => {
                   value={formData.message}
                   onChange={handleChange}
                   required
+                  disabled={isLoading}
                 />
               </Form.Group>
-              <Button variant="primary" type="submit" className="w-100">
-                Send Message
+              <Button 
+                variant="primary" 
+                type="submit" 
+                className="w-100" 
+                disabled={isLoading}
+              >
+                {isLoading ? 'Sending...' : 'Send Message'}
               </Button>
             </Form>
           </motion.div>

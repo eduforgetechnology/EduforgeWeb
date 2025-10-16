@@ -199,9 +199,11 @@ const Educators = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Button variant="primary" size="lg" className="px-4 py-2">
-              <i className="fas fa-paper-plane me-2"></i>Apply Now
-            </Button>
+            <a href="https://forms.gle/your-google-form-link" target="_blank" rel="noopener noreferrer">
+              <Button variant="primary" size="lg" className="px-4 py-2">
+                <i className="fas fa-paper-plane me-2"></i>Apply Now
+              </Button>
+            </a>
           </motion.div>
         </div>
       </motion.div>
