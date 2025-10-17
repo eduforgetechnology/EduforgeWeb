@@ -11,6 +11,7 @@ import Tuitions from './components/Tuitions';
 import Competitions from './components/Competitions';
 import About from './components/About';
 import Contact from './components/Contact';
+import Services from './components/Services';
 import Dashboard from './components/Dashboard';
 import AIAssistant from './components/AIAssistant';
 import CourseDetails from './components/CourseDetails';
@@ -35,9 +36,10 @@ function App() {
             <Route path="/courses/:courseId" element={<ProtectedRoute><CourseDetails /></ProtectedRoute>} />
             <Route path="/educators" element={<ProtectedRoute><Educators /></ProtectedRoute>} />
             <Route path="/tuitions" element={<ProtectedRoute><Tuitions /></ProtectedRoute>} />
-            <Route path="/competitions" element={<ProtectedRoute><Competitions /></ProtectedRoute>} />
-            <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
-            <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
+            <Route path="/competitions" element={<Competitions />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/services" element={<Services />} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           </Routes>
         </div>

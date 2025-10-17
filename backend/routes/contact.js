@@ -43,7 +43,7 @@ const sanitizeInput = (str) => {
 router.post('/', contactLimiter, async (req, res) => {
     try {
         // Input validation
-        const { name, email, subject, message } = req.body;
+        const { name, email, phone, institution, subject, message } = req.body;
 
         if (!name || !email || !subject || !message) {
             return res.status(400).json({
@@ -63,6 +63,8 @@ router.post('/', contactLimiter, async (req, res) => {
         const sanitizedName = sanitizeInput(name);
         const sanitizedSubject = sanitizeInput(subject);
         const sanitizedMessage = sanitizeInput(message);
+        const sanitizedPhone = phone ? sanitizeInput(phone) : '';
+        const sanitizedInstitution = institution ? sanitizeInput(institution) : '';
 
         // Verify required environment variables
         if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD || !process.env.EMAIL_RECIPIENT) {
@@ -85,6 +87,8 @@ router.post('/', contactLimiter, async (req, res) => {
                 <h3>New Contact Form Submission</h3>
                 <p><strong>Name:</strong> ${sanitizedName}</p>
                 <p><strong>Email:</strong> ${email}</p>
+                <p><strong>Phone Number:</strong> ${sanitizedPhone || 'Not provided'}</p>
+                <p><strong>School/Institution:</strong> ${sanitizedInstitution || 'Not provided'}</p>
                 <p><strong>Subject:</strong> ${sanitizedSubject}</p>
                 <p><strong>Message:</strong></p>
                 <p>${sanitizedMessage}</p>

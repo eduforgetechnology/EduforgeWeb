@@ -1,17 +1,18 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
-import { 
-  FaHome, 
-  FaBook, 
-  FaUsers, 
-  FaMoneyBill, 
-  FaTrophy, 
-  FaInfo, 
-  FaSignOutAlt, 
+import {
+  FaHome,
+  FaBook,
+  FaUsers,
+  FaMoneyBill,
+  FaTrophy,
+  FaInfo,
+  FaSignOutAlt,
   FaUser,
-  FaEnvelope, 
-  FaBars
+  FaEnvelope,
+  FaBars,
+  FaServicestack
 } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { AuthContext } from '../context/AuthContext';
@@ -80,34 +81,20 @@ const Navigation = () => {
               <div className="logo-icon">
                 <span>E</span>
               </div>
-    <div className="brand-text ms-2">EduForge</div>
+              <div className="brand-text ms-2">EduForge</div>
             </div>
           </Navbar.Brand>
         </div>
 
-        {/* Login button for non-logged in users */}
-        {!user && (
-          <div className="d-flex align-items-center ms-auto">
-            <Button
-              as={Link}
-              to="/login"
-              variant="primary"
-              className="login-button"
-            >
-              <FaUser className="me-2" /> Login
-            </Button>
-          </div>
-        )}
+        <Navbar.Toggle aria-controls="basic-navbar-nav">
+          <FaBars />
+        </Navbar.Toggle>
 
-        {/* Menu toggle and collapse only for logged in users */}
-        {user && (
-          <>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" className="ms-auto">
-              <FaBars />
-            </Navbar.Toggle>
-
-            <Navbar.Collapse id="basic-navbar-nav">
-              <Nav className="mx-auto">
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="ms-auto align-items-center">
+            {!user ? (
+              // Navigation items for non-logged in users
+              <>
                 <motion.div
                   variants={navItemVariants}
                   initial="hidden"
@@ -117,65 +104,12 @@ const Navigation = () => {
                   <Nav.Link
                     as={Link}
                     to="/"
-                    className={isActive('/') ? 'active-nav-link' : ''}
+                    className={isActive('/') ? 'active' : ''}
                     onClick={() => setExpanded(false)}
                   >
-                    <FaHome className="nav-icon" />
-                    <span>Home</span>
+                    <FaHome className="nav-icon" /> Home
                   </Nav.Link>
                 </motion.div>
-
-                <motion.div
-                  variants={navItemVariants}
-                  initial="hidden"
-                  animate="visible"
-                  whileHover="hover"
-                >
-                  <Nav.Link
-                    as={Link}
-                    to="/courses"
-                    className={isActive('/courses') ? 'active-nav-link' : ''}
-                    onClick={() => setExpanded(false)}
-                  >
-                    <FaBook className="nav-icon" />
-                    <span>Courses</span>
-                  </Nav.Link>
-                </motion.div>
-
-                <motion.div
-                  variants={navItemVariants}
-                  initial="hidden"
-                  animate="visible"
-                  whileHover="hover"
-                >
-                  <Nav.Link
-                    as={Link}
-                    to="/educators"
-                    className={isActive('/educators') ? 'active-nav-link' : ''}
-                    onClick={() => setExpanded(false)}
-                  >
-                    <FaUsers className="nav-icon" />
-                    <span>Educators</span>
-                  </Nav.Link>
-                </motion.div>
-
-                <motion.div
-                  variants={navItemVariants}
-                  initial="hidden"
-                  animate="visible"
-                  whileHover="hover"
-                >
-                  <Nav.Link
-                    as={Link}
-                    to="/tuitions"
-                    className={isActive('/tuitions') ? 'active-nav-link' : ''}
-                    onClick={() => setExpanded(false)}
-                  >
-                    <FaMoneyBill className="nav-icon" />
-                    <span>Tuitions</span>
-                  </Nav.Link>
-                </motion.div>
-
                 <motion.div
                   variants={navItemVariants}
                   initial="hidden"
@@ -185,14 +119,12 @@ const Navigation = () => {
                   <Nav.Link
                     as={Link}
                     to="/competitions"
-                    className={isActive('/competitions') ? 'active-nav-link' : ''}
+                    className={isActive('/competitions') ? 'active' : ''}
                     onClick={() => setExpanded(false)}
                   >
-                    <FaTrophy className="nav-icon" />
-                    <span>Competitions</span>
+                    <FaTrophy className="nav-icon" /> Competitions
                   </Nav.Link>
                 </motion.div>
-
                 <motion.div
                   variants={navItemVariants}
                   initial="hidden"
@@ -201,15 +133,13 @@ const Navigation = () => {
                 >
                   <Nav.Link
                     as={Link}
-                    to="/about"
-                    className={isActive('/about') ? 'active-nav-link' : ''}
+                    to="/services"
+                    className={isActive('/services') ? 'active' : ''}
                     onClick={() => setExpanded(false)}
                   >
-                    <FaInfo className="nav-icon" />
-                    <span>About</span>
+                    <FaServicestack className="nav-icon" /> Services
                   </Nav.Link>
                 </motion.div>
-
                 <motion.div
                   variants={navItemVariants}
                   initial="hidden"
@@ -219,15 +149,40 @@ const Navigation = () => {
                   <Nav.Link
                     as={Link}
                     to="/contact"
-                    className={isActive('/contact') ? 'active-nav-link' : ''}
+                    className={isActive('/contact') ? 'active' : ''}
                     onClick={() => setExpanded(false)}
                   >
-                    <FaEnvelope className="nav-icon" />
-                    <span>Contact</span>
+                    <FaEnvelope className="nav-icon" /> Contact
                   </Nav.Link>
                 </motion.div>
-
-                {/* Add Dashboard and Logout to the main navigation */}
+                <motion.div
+                  variants={navItemVariants}
+                  initial="hidden"
+                  animate="visible"
+                  whileHover="hover"
+                >
+                  <Nav.Link
+                    as={Link}
+                    to="/about"
+                    className={isActive('/about') ? 'active' : ''}
+                    onClick={() => setExpanded(false)}
+                  >
+                    <FaInfo className="nav-icon" /> About
+                  </Nav.Link>
+                </motion.div>
+                <Button
+                  as={Link}
+                  to="/login"
+                  variant="primary"
+                  className="login-button ms-3"
+                  onClick={() => setExpanded(false)}
+                >
+                  <FaUser className="me-2" /> Login
+                </Button>
+              </>
+            ) : (
+              // Navigation items for logged in users
+              <>
                 <motion.div
                   variants={navItemVariants}
                   initial="hidden"
@@ -237,14 +192,132 @@ const Navigation = () => {
                   <Nav.Link
                     as={Link}
                     to="/dashboard"
-                    className={isActive('/dashboard') ? 'active-nav-link' : ''}
+                    className={isActive('/dashboard') ? 'active' : ''}
                     onClick={() => setExpanded(false)}
                   >
-                    <FaUser className="nav-icon" />
-                    <span>Dashboard</span>
+                    <FaUser className="nav-icon" /> Dashboard
                   </Nav.Link>
                 </motion.div>
-
+                <motion.div
+                  variants={navItemVariants}
+                  initial="hidden"
+                  animate="visible"
+                  whileHover="hover"
+                >
+                  <Nav.Link
+                    as={Link}
+                    to="/"
+                    className={isActive('/') ? 'active' : ''}
+                    onClick={() => setExpanded(false)}
+                  >
+                    <FaHome className="nav-icon" /> Home
+                  </Nav.Link>
+                </motion.div>
+                <motion.div
+                  variants={navItemVariants}
+                  initial="hidden"
+                  animate="visible"
+                  whileHover="hover"
+                >
+                  <Nav.Link
+                    as={Link}
+                    to="/courses"
+                    className={isActive('/courses') ? 'active' : ''}
+                    onClick={() => setExpanded(false)}
+                  >
+                    <FaBook className="nav-icon" /> Courses
+                  </Nav.Link>
+                </motion.div>
+                <motion.div
+                  variants={navItemVariants}
+                  initial="hidden"
+                  animate="visible"
+                  whileHover="hover"
+                >
+                  <Nav.Link
+                    as={Link}
+                    to="/educators"
+                    className={isActive('/educators') ? 'active' : ''}
+                    onClick={() => setExpanded(false)}
+                  >
+                    <FaUsers className="nav-icon" /> Educators
+                  </Nav.Link>
+                </motion.div>
+                <motion.div
+                  variants={navItemVariants}
+                  initial="hidden"
+                  animate="visible"
+                  whileHover="hover"
+                >
+                  <Nav.Link
+                    as={Link}
+                    to="/tuitions"
+                    className={isActive('/tuitions') ? 'active' : ''}
+                    onClick={() => setExpanded(false)}
+                  >
+                    <FaMoneyBill className="nav-icon" /> Tuitions
+                  </Nav.Link>
+                </motion.div>
+                <motion.div
+                  variants={navItemVariants}
+                  initial="hidden"
+                  animate="visible"
+                  whileHover="hover"
+                >
+                  <Nav.Link
+                    as={Link}
+                    to="/competitions"
+                    className={isActive('/competitions') ? 'active' : ''}
+                    onClick={() => setExpanded(false)}
+                  >
+                    <FaTrophy className="nav-icon" /> Competitions
+                  </Nav.Link>
+                </motion.div>
+                <motion.div
+                  variants={navItemVariants}
+                  initial="hidden"
+                  animate="visible"
+                  whileHover="hover"
+                >
+                  <Nav.Link
+                    as={Link}
+                    to="/services"
+                    className={isActive('/services') ? 'active' : ''}
+                    onClick={() => setExpanded(false)}
+                  >
+                    <FaServicestack className="nav-icon" /> Services
+                  </Nav.Link>
+                </motion.div>
+                <motion.div
+                  variants={navItemVariants}
+                  initial="hidden"
+                  animate="visible"
+                  whileHover="hover"
+                >
+                  <Nav.Link
+                    as={Link}
+                    to="/about"
+                    className={isActive('/about') ? 'active' : ''}
+                    onClick={() => setExpanded(false)}
+                  >
+                    <FaInfo className="nav-icon" /> About
+                  </Nav.Link>
+                </motion.div>
+                <motion.div
+                  variants={navItemVariants}
+                  initial="hidden"
+                  animate="visible"
+                  whileHover="hover"
+                >
+                  <Nav.Link
+                    as={Link}
+                    to="/contact"
+                    className={isActive('/contact') ? 'active' : ''}
+                    onClick={() => setExpanded(false)}
+                  >
+                    <FaEnvelope className="nav-icon" /> Contact
+                  </Nav.Link>
+                </motion.div>
                 <motion.div
                   variants={navItemVariants}
                   initial="hidden"
@@ -256,16 +329,22 @@ const Navigation = () => {
                       logout();
                       setExpanded(false);
                     }}
-                    className="nav-link-logout"
+                    className="text-danger"
                   >
-                    <FaSignOutAlt className="nav-icon" />
-                    <span>Logout</span>
+                    <FaSignOutAlt className="nav-icon" /> Logout
                   </Nav.Link>
                 </motion.div>
-              </Nav>
-            </Navbar.Collapse>
-          </>
-        )}
+                
+                {/* User profile indicator */}
+                <div className="user-profile-indicator ms-3">
+                  <div className="profile-circle">
+                    {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                  </div>
+                </div>
+              </>
+            )}
+          </Nav>
+        </Navbar.Collapse>
       </Container>
     </Navbar>
   );

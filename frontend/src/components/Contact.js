@@ -6,6 +6,8 @@ const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
+    institution: '',
     subject: '',
     message: ''
   });
@@ -59,7 +61,7 @@ const Contact = () => {
 
       setStatus('success');
       setMessage('Thank you for your message! We will get back to you soon.');
-      setFormData({ name: '', email: '', subject: '', message: '' });
+      setFormData({ name: '', email: '', phone: '', institution: '', subject: '', message: '' });
 
     } catch (error) {
       console.error('Contact form error:', error);
@@ -130,6 +132,34 @@ const Contact = () => {
                       value={formData.email}
                       onChange={handleChange}
                       required
+                      disabled={isLoading}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Phone Number</Form.Label>
+                    <Form.Control
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      placeholder="Optional"
+                      disabled={isLoading}
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>School/Institution</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="institution"
+                      value={formData.institution}
+                      onChange={handleChange}
+                      placeholder="Optional"
                       disabled={isLoading}
                     />
                   </Form.Group>
