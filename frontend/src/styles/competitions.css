@@ -1,0 +1,245 @@
+/* Competitions Page Styles */
+
+.competitions-container {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+.competitions-header {
+  background: linear-gradient(45deg, #ffd700, #83255f, #084452, #152778);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.competitions-description {
+  color: #f8f9fa;
+  font-size: 1.2rem;
+  max-width: 800px;
+  margin: 0 auto 3rem;
+}
+
+.competition-card {
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  height: 100%;
+}
+
+.competition-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.competition-card-img {
+  height: 200px;
+  width: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+  max-width: 100%;
+  background-color: #f8f9fa;
+}
+
+.competition-card:hover .competition-card-img {
+  transform: scale(1.05);
+}
+
+.competition-card-body {
+  padding: 1.5rem;
+}
+
+.competition-card-title {
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.competition-card-date {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.competition-card-text {
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.register-btn {
+  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  border: none;
+  border-radius: 25px;
+  padding: 0.5rem 1.5rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.register-btn:hover {
+  background: linear-gradient(45deg, #ee5a24, #ff6b6b);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+.participate-section {
+  background: linear-gradient(135deg, #d9e715 0%, #961c63 100%);
+  border-radius: 20px;
+  padding: 3rem;
+  color: white;
+  margin: 3rem 0;
+  text-align: center;
+}
+
+.participate-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: bold;
+}
+
+.participate-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.step-item {
+  display: flex;
+  align-items: flex-start;
+  background: rgba(255,255,255,0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: all 0.3s ease;
+}
+
+.step-item:hover {
+  transform: translateX(10px);
+  background: rgba(255,255,255,0.15);
+}
+
+.step-icon {
+  background: linear-gradient(45deg, #ffd700, #ff6b6b);
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.step-content h4 {
+  color: #fff;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.step-content p {
+  color: rgba(255,255,255,0.9);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.cta-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 3rem;
+  color: white;
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.cta-title {
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.cta-text {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.cta-btn {
+  background: linear-gradient(45deg, #4ecdc4, #44a08d);
+  border: none;
+  border-radius: 25px;
+  padding: 0.75rem 2rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+}
+
+.cta-btn:hover {
+  background: linear-gradient(45deg, #44a08d, #4ecdc4);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+}
+
+.modal-content {
+  border-radius: 20px;
+  border: none;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 20px 20px 0 0;
+  border-bottom: none;
+}
+
+.modal-body {
+  padding: 2rem;
+}
+
+.modal-footer {
+  border-top: none;
+  padding: 1rem 2rem;
+}
+
+.form-control {
+  border-radius: 10px;
+  border: 2px solid #e9ecef;
+  padding: 0.75rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.btn-primary {
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  border: none;
+  border-radius: 25px;
+  padding: 0.5rem 1.5rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(45deg, #764ba2, #667eea);
+  transform: translateY(-2px);
+}
+
+.trophy-icon {
+  color: #ffd700;
+  margin-right: 0.5rem;
+}

@@ -1,61 +1,89 @@
 import React from 'react';
-import { Container, Row, Col, Card, Button, Table, Badge } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { motion } from 'framer-motion';
+import { FaTrophy, FaCalendarAlt, FaRocket, FaSearch, FaUserPlus, FaTools, FaPlay, FaAward } from 'react-icons/fa';
+import '../styles/competitions.css';
 
 const Competitions = () => {
   const upcomingCompetitions = [
     {
-      title: 'Math Olympiad 2023',
-      date: 'October 15, 2023',
-      description: 'Challenge your mathematical skills in this prestigious competition.',
-      prize: '$1000',
-      status: 'Open',
-      image: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400&h=250&fit=crop'
+      title: 'WRO(World Robot Olympiad)',
+      date: 'November 26-28, 2025',
+      description: 'The World Robot Olympiad (WRO) is a global robotics competition where students design and program robots to solve real-world challenges, promoting creativity, teamwork, and innovation in STEM.',
+      image: 'https://wroindia.org/wp-content/uploads/2024/03/Cover-week-09-1024x536.jpg',
+      registrationLink: 'https://wro-association.org/'
     },
     {
-      title: 'Science Fair',
-      date: 'November 5, 2023',
-      description: 'Showcase your innovative science projects and win recognition.',
-      prize: '$500',
-      status: 'Open',
-      image: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=400&h=250&fit=crop'
+      title: 'FTC (FIRST Tech Challenge)',
+      date: 'December 2025 and January 2026',
+      description: 'The FIRST Tech Challenge (FTC) is a global robotics competition where students build and program robots to complete missions, fostering creativity, teamwork, and STEM skills.',
+      image: 'https://upload.wikimedia.org/wikipedia/en/e/ee/FIRST_Tech_challenge_logo.png',
+      registrationLink: 'https://ftcindia.org.in/'
     },
     {
-      title: 'Coding Challenge',
-      date: 'December 1, 2023',
-      description: 'Solve complex programming problems and compete with the best.',
-      prize: '$750',
-      status: 'Registration Closed',
-      image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=250&fit=crop'
+      title: 'VEX V5 Robotics Competition',
+      date: 'October 2025 through April 2026',
+      description: 'VEX V5 Robotics Competition is a global robotics challenge where students design and program robots to complete tasks, encouraging creativity, teamwork, and practical STEM skills.',
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQu775UoWWPzknJQ00HG0gzG6IFBwnbl4GHnA&s',
+      registrationLink: 'https://www.robotevents.com/robot-competitions/vex-robotics-competition'
+    },
+    {
+      title: 'WSRO(World STEM & Robotics Olympiad )',
+      date: 'October 4th and 5th, 2025',
+      description: 'World STEM & Robotics Olympiad (WSRO) is a global competition where students design and program robots to solve STEM-based challenges, promoting creativity, teamwork, and innovation in science and technology.',
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQg7SiF7Dzi9_zRGescF0xYobzd9JCYMNgQdA&s',
+      registrationLink: 'https://wsro.in/'
+    },
+    {
+      title: 'ICode',
+      date: ' October 2025',
+      description: 'ICode is an international coding and robotics competition where students develop programming and problem-solving skills, fostering creativity, teamwork, and innovation in technology and STEM.',
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQV33smJHyYkJRcu8KR3kc4NS8pmhI0AUyF0A&s',
+      registrationLink: 'https://icode.org/'
+    },
+    {
+      title: 'CodeAvour',
+      date: 'August 30, 2025',
+      description: 'Codeavour is a global coding and technology competition where students showcase their programming skills, solve real-world challenges, and develop creativity, teamwork, and STEM innovation.',
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRY46CjKSWsVkXzUAjAyb39hoS5EnN8csCo5w&s',
+      registrationLink: 'https://codeavour.org/'
     }
   ];
 
-  const leaderboard = [
-    { rank: 1, name: 'Alice Johnson', score: 950, competition: 'Math Olympiad' },
-    { rank: 2, name: 'Bob Smith', score: 920, competition: 'Math Olympiad' },
-    { rank: 3, name: 'Charlie Brown', score: 890, competition: 'Math Olympiad' },
-    { rank: 4, name: 'Diana Prince', score: 880, competition: 'Science Fair' },
-    { rank: 5, name: 'Eve Wilson', score: 870, competition: 'Coding Challenge' }
-  ];
 
   return (
-    <Container className="mt-4">
-      <motion.h2
-        className="text-center mb-4"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        Academic Competitions
-      </motion.h2>
-      <motion.p
-        className="text-center mb-5 lead"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2, duration: 0.5 }}
-      >
-        Challenge yourself, compete with peers, and win exciting prizes while showcasing your academic prowess.
-      </motion.p>
+    <div className="competitions-container">
+      <Container>
+        <motion.h2
+          className="competitions-header"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <FaTrophy className="trophy-icon" /> Competitions & Challenges
+        </motion.h2>
+        <Row className="align-items-center mb-5">
+          <Col md={6}>
+            <motion.p
+              className="competitions-description"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            >
+              We actively encourage participation in a variety of national and international competitions that promote creativity, innovation, and problem-solving skills. Events such as the World Robot Olympiad (WRO), FIRST Tech Challenge (FTC), and World Science Robot Olympiad (WSRO) provide students with valuable hands-on experience, teamwork opportunities, and exposure to emerging technologies. Through these competitions, participants develop confidence, leadership, and a spirit of collaboration that extends beyond the classroom.
+            </motion.p>
+          </Col>
+          <Col md={6}>
+            <motion.img
+              src="https://media.istockphoto.com/id/1357832129/photo/children-in-robotics-classes-celebrate-victory.webp?a=1&b=1&s=612x612&w=0&k=20&c=1BSDorwTdUVn7fNRts4kctvVJfbV__q39rveiS4UV5c="
+              alt="Students participating in robotics competition"
+              className="img-fluid rounded"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+            />
+          </Col>
+        </Row>
 
       {/* Upcoming Competitions */}
       <motion.section
@@ -74,22 +102,20 @@ const Competitions = () => {
                 transition={{ delay: index * 0.2, duration: 0.8 }}
                 whileHover={{ scale: 1.05 }}
               >
-                <Card className="h-100 shadow">
-                  <Card.Img variant="top" src={comp.image} alt={comp.title} />
-                  <Card.Body>
-                    <Card.Title>{comp.title}</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">{comp.date}</Card.Subtitle>
-                    <Card.Text>{comp.description}</Card.Text>
-                    <p><strong>Prize:</strong> {comp.prize}</p>
-                    <Badge bg={comp.status === 'Open' ? 'success' : 'secondary'}>{comp.status}</Badge>
-                    <br />
-                    <Button 
-                      variant="primary" 
-                      className="mt-3 bg-primary" 
-                      disabled={comp.status !== 'Open'}
-                      style={{color: 'white'}}
-                    >
-                      {comp.status === 'Open' ? 'Register Now' : 'Registration Closed'}
+                <Card className="competition-card h-100">
+                  <Card.Img variant="top" src={comp.image} alt={comp.title} className="competition-card-img" />
+                  <Card.Body className="competition-card-body">
+                    <Card.Title className="competition-card-title">
+                      <FaRocket className="me-2" style={{color: '#ff6b6b'}} />
+                      {comp.title}
+                    </Card.Title>
+                    <Card.Subtitle className="competition-card-date">
+                      <FaCalendarAlt className="me-1" />
+                      {comp.date}
+                    </Card.Subtitle>
+                    <Card.Text className="competition-card-text">{comp.description}</Card.Text>
+                    <Button className="register-btn w-100" as="a" href={comp.registrationLink} target="_blank" rel="noopener noreferrer">
+                      Register Now
                     </Button>
                   </Card.Body>
                 </Card>
@@ -99,95 +125,86 @@ const Competitions = () => {
         </Row>
       </motion.section>
 
-      {/* Leaderboard */}
-      <motion.section
-        className="mb-5"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-      >
-        <h3 className="text-center mb-4">Current Leaderboard</h3>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8 }}
-        >
-          <Table striped bordered hover responsive className="shadow">
-            <thead className="table-dark">
-              <tr>
-                <th>Rank</th>
-                <th>Name</th>
-                <th>Score</th>
-                <th>Competition</th>
-              </tr>
-            </thead>
-            <tbody>
-              {leaderboard.map((entry, index) => (
-                <motion.tr
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                >
-                  <td>
-                    {entry.rank === 1 && '🥇'}
-                    {entry.rank === 2 && '🥈'}
-                    {entry.rank === 3 && '🥉'}
-                    {entry.rank}
-                  </td>
-                  <td>{entry.name}</td>
-                  <td>{entry.score}</td>
-                  <td>{entry.competition}</td>
-                </motion.tr>
-              ))}
-            </tbody>
-          </Table>
-        </motion.div>
-      </motion.section>
+
 
       {/* How to Participate */}
       <motion.section
-        className="mb-5"
+        className="participate-section"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        <h3 className="text-center mb-4">How to Participate</h3>
+        <h3 className="participate-title">How to Participate</h3>
         <motion.div
-          className="bg-blue p-4 rounded shadow"
+          className="participate-steps"
           initial={{ y: 20 }}
           animate={{ y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <ol className="list-unstyled">
-            <li className="mb-3">
-              <strong>1. Register</strong><br />
-              Sign up for the competition of your choice during the registration period.
-            </li>
-            <li className="mb-3">
-              <strong>2. Prepare</strong><br />
-              Study the competition guidelines and prepare thoroughly for the challenge.
-            </li>
-            <li className="mb-3">
-              <strong>3. Compete</strong><br />
-              Participate in the competition and showcase your skills to win prizes.
-            </li>
-          </ol>
+          <div className="step-item">
+            <div className="step-icon">
+              <FaSearch />
+            </div>
+            <div className="step-content">
+              <h4>1. Discover Competitions</h4>
+              <p>Explore our diverse range of competitions and find the perfect challenge that matches your interests and skill level.</p>
+            </div>
+          </div>
+          <div className="step-item">
+            <div className="step-icon">
+              <FaUserPlus />
+            </div>
+            <div className="step-content">
+              <h4>2. Register & Join</h4>
+              <p>Sign up through our streamlined registration process. Form teams, provide necessary details, and secure your spot.</p>
+            </div>
+          </div>
+          <div className="step-item">
+            <div className="step-icon">
+              <FaTools />
+            </div>
+            <div className="step-content">
+              <h4>3. Prepare & Train</h4>
+              <p>Access resources, practice challenges, and refine your skills with our mentorship programs and training materials.</p>
+            </div>
+          </div>
+          <div className="step-item">
+            <div className="step-icon">
+              <FaPlay />
+            </div>
+            <div className="step-content">
+              <h4>4. Compete & Excel</h4>
+              <p>Showcase your talents on competition day. Collaborate, innovate, and strive for excellence in your chosen challenge.</p>
+            </div>
+          </div>
+          <div className="step-item">
+            <div className="step-icon">
+              <FaAward />
+            </div>
+            <div className="step-content">
+              <h4>5. Celebrate & Grow</h4>
+              <p>Celebrate your achievements, learn from the experience, and continue your STEM journey with newfound skills and confidence.</p>
+            </div>
+          </div>
         </motion.div>
       </motion.section>
 
       {/* Call to Action */}
       <motion.div
-        className="text-center mb-5 bg-blue text-white py-5 rounded shadow"
+        className="cta-section"
         initial={{ opacity: 0, scale: 0.9 }}
         whileInView={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1 }}
       >
-        <h3>Ready to Compete?</h3>
-        <p className="lead">Don't miss out on the opportunity to challenge yourself and win prizes.</p>
-        <Button variant="light" size="lg">View All Competitions</Button>
+        <h3 className="cta-title">Ready to Compete?</h3>
+        <p className="cta-text">Don't miss out on the opportunity to challenge yourself and win prizes.</p>
+        <Button className="cta-btn">View All Competitions</Button>
       </motion.div>
-    </Container>
+
+
+
+      </Container>
+    </div>
   );
 };
 
