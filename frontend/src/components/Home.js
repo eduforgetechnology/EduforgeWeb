@@ -111,13 +111,13 @@ const Home = () => {
     <div>
       {/* Hero Section with Dynamic Background */}
       <motion.div
-        className="bg-primary-gradient text-white py-5 hero-section"
+        className="bg-primary-gradient text-white py-2 py-md-5 py-lg-3 hero-section"
         initial="hidden"
         animate="visible"
         variants={heroVariants}
       >
         <Container>
-          <Row className="align-items-center py-5 py-md-6">
+          <Row className="align-items-center py-3 py-md-5 py-lg-3">
             <Col md={6}>
               <motion.h1
                 className="display-4 fw-bold text-white"

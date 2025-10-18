@@ -251,8 +251,8 @@
 
   .navbar-collapse {
     background: rgba(33, 37, 41, 0.98);
-    margin: 0.5rem -1rem -0.5rem;
-    padding: 1rem;
+    margin: 0 -1rem -0.5rem !important;
+    padding: 0 1rem 1rem !important;
     border-radius: var(--border-radius-md);
     box-shadow: var(--shadow-lg);
   }
@@ -556,17 +556,17 @@
 @media (max-width: 991px) {
   .navbar-collapse {
     background: rgba(33, 37, 41, 0.98);
-    margin: 1rem -1rem -0.5rem;
-    padding: 1rem;
+    margin: 0 -1rem -0.5rem !important;
+    padding: 0 1rem 1rem !important;
     border-radius: var(--border-radius-md);
     box-shadow: var(--shadow-lg);
   }
-  
+
   .nav-link {
     padding: 0.75rem !important;
     margin: 0.25rem 0;
   }
-  
+
   .user-dropdown-toggle {
     margin-left: 1rem;
   }

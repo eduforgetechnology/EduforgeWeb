@@ -60,7 +60,7 @@ const About = () => {
     <div className="about-container">
       {/* Hero Section */}
       <motion.div
-        className="about-hero-section text-white py-5"
+        className="about-hero-section text-white py-2 py-md-5"
         style={{ background: 'var(--primary-gradient)' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -297,7 +297,7 @@ const About = () => {
                   src="https://media.istockphoto.com/id/500504909/photo/business-vision.jpg?s=612x612&w=0&k=20&c=sfAyloZ4GkAkZQ7KIm_Jeg33a4Z-HuR7lTijWbRN95g="
                   alt="Future of STEM Education"
                   className="img-fluid rounded shadow-lg"
-                  style={{ maxWidth: '600px' }}
+                  style={{ width: '100%', height: 'auto', maxWidth: '600px' }}
                 />
               </motion.div>
             </Col>
@@ -312,21 +312,21 @@ const About = () => {
                     <span>Innovation-Driven Learning</span>
                   </div>
                 </div>
-                <div className="col-md-6 col-lg-3 text-white">
-                  <div className="d-flex align-items-center mb-3">
+                <div className="col-md-6 col-lg-3">
+                  <div className="d-flex align-items-center mb-3 text-white">
                     <FaUsers className="text-white me-3" size={24} />
                     <span>Collaborative Communities</span>
                   </div>
                 </div>
-                <div className="col-md-6 col-lg-3 text-white">
-                  <div className="d-flex align-items-center mb-3">
+                <div className="col-md-6 col-lg-3">
+                  <div className="d-flex align-items-center mb-3 text-white">
                     <FaGraduationCap className="text-white me-3" size={24} />
                     <span>Real-World Applications</span>
                   </div>
                 </div>
-                <div className="col-md-6 col-lg-3 text-white">
-                  <div className="d-flex align-items-center mb-3">
-                    <FaHandshake className="white me-3" size={24} />
+                <div className="col-md-6 col-lg-3">
+                  <div className="d-flex align-items-center mb-3 text-white">
+                    <FaHandshake className="text-white me-3" size={24} />
                     <span>Industry Partnerships</span>
                   </div>
                 </div>
