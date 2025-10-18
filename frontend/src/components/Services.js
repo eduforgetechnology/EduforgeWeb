@@ -4,10 +4,10 @@ import { Card } from 'react-bootstrap';
 export default function Services() {
   const services = [
     {
-      icon: 'fas fa-users',
+      icon: 'fa-solid fa-chalkboard-user',
       title: 'Teacher Training Programs',
       description: 'Comprehensive professional development for educators in robotics, coding, and STEM methodologies',
-      gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      gradient: 'linear-gradient(135deg, #980e8dff 0%, #880a45ff 100%)',
       features: ['Hands-on Workshops', 'Curriculum Development', 'Assessment Strategies', 'Ongoing Support']
     },
     {
@@ -53,11 +53,11 @@ export default function Services() {
         <div className="row">
           {services.map((service, index) => (
             <div key={index} className="col-lg-6 col-md-6 mb-4">
-              <Card className="h-100 border-0 position-relative overflow-hidden" style={{
+              <Card className="h-100 border-0 position-relative overflow-hidden hover-shadow" style={{
                 borderRadius: '20px',
                 boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
                 transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-                background: `linear-gradient(135deg, ${service.gradient.replace('linear-gradient(135deg, ', '').replace(' 100%)', ', 0.08) 0%, ').replace(' 0%, ', ', 0.08) 0%, ')} 100%)`,
+                background: service.gradient,
                 backdropFilter: 'blur(10px)',
                 border: '1px solid rgba(255,255,255,0.1)'
               }}>
@@ -75,10 +75,13 @@ export default function Services() {
                 }}>
                   Featured
                 </div>
-                <Card.Body className="text-center p-5 position-relative">
-                  <div className="icon-container mx-auto mb-4" style={{
-                    width: '100px',
-                    height: '100px',
+                <Card.Body className="text-center p-4 position-relative" style={{
+                  background: 'rgba(255, 255, 255, 0.9)',
+                  borderRadius: '20px'
+                }}>
+                  <div className="icon-container mx-auto mb-3" style={{
+                    width: '80px',
+                    height: '80px',
                     background: service.gradient,
                     borderRadius: '50%',
                     display: 'flex',
@@ -87,29 +90,18 @@ export default function Services() {
                     boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
                     transition: 'transform 0.3s ease'
                   }}>
-                    <i className={`${service.icon} fa-3x text-white`}></i>
+                    <i className={`${service.icon} fa-2x text-white`}></i>
                   </div>
-                  <Card.Title className="h4 font-weight-bold text-dark mb-3" style={{fontSize: '1.5em'}}>
+                  <Card.Title className="h4 font-weight-bold text-dark mb-3" style={{fontSize: '1.3em'}}>
                     {service.title}
                   </Card.Title>
-                  <Card.Text className="text-muted mb-4" style={{fontSize: '1.1em', lineHeight: '1.6'}}>
+                  <Card.Text className="text-muted mb-4" style={{fontSize: '1em', lineHeight: '1.6'}}>
                     {service.description}
                   </Card.Text>
                   <ul className="list-unstyled text-left" style={{paddingLeft: '20px'}}>
                     {service.features.map((feature, idx) => (
                       <li key={idx} className="mb-3 d-flex align-items-center">
-                        <div className="feature-icon mr-3" style={{
-                          width: '20px',
-                          height: '20px',
-                          background: service.gradient,
-                          borderRadius: '50%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          flexShrink: 0
-                        }}>
-                          <i className="fas fa-check text-white" style={{fontSize: '0.7em'}}></i>
-                        </div>
+                        <i className="fas fa-check text-success mr-3" style={{fontSize: '1em'}}></i>
                         <span className="text-dark font-weight-medium" style={{fontSize: '1em'}}>{feature}</span>
                       </li>
                     ))}

@@ -74,14 +74,11 @@ const Navigation = () => {
       expanded={expanded}
       onToggle={handleNavbarToggle}
     >
-      <Container>
+      <Container fluid>
         <div className="d-flex align-items-center">
           <Navbar.Brand as={Link} to="/" className="brand-logo">
             <div className="d-flex align-items-center">
-              <div className="logo-icon">
-                <span>E</span>
-              </div>
-              <div className="brand-text ms-2">EduForge</div>
+              <img src="/eduforge.svg" alt="EduForge Logo" className="navbar-logo" />
             </div>
           </Navbar.Brand>
         </div>
@@ -91,7 +88,7 @@ const Navigation = () => {
         </Navbar.Toggle>
 
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto align-items-center">
+          <Nav className="align-items-center">
             {!user ? (
               // Navigation items for non-logged in users
               <>
@@ -191,21 +188,6 @@ const Navigation = () => {
                 >
                   <Nav.Link
                     as={Link}
-                    to="/dashboard"
-                    className={isActive('/dashboard') ? 'active' : ''}
-                    onClick={() => setExpanded(false)}
-                  >
-                    <FaUser className="nav-icon" /> Dashboard
-                  </Nav.Link>
-                </motion.div>
-                <motion.div
-                  variants={navItemVariants}
-                  initial="hidden"
-                  animate="visible"
-                  whileHover="hover"
-                >
-                  <Nav.Link
-                    as={Link}
                     to="/"
                     className={isActive('/') ? 'active' : ''}
                     onClick={() => setExpanded(false)}
@@ -271,6 +253,21 @@ const Navigation = () => {
                     onClick={() => setExpanded(false)}
                   >
                     <FaTrophy className="nav-icon" /> Competitions
+                  </Nav.Link>
+                </motion.div>
+                <motion.div
+                  variants={navItemVariants}
+                  initial="hidden"
+                  animate="visible"
+                  whileHover="hover"
+                >
+                  <Nav.Link
+                    as={Link}
+                    to="/dashboard"
+                    className={isActive('/dashboard') ? 'active' : ''}
+                    onClick={() => setExpanded(false)}
+                  >
+                    <FaUser className="nav-icon" /> Dashboard
                   </Nav.Link>
                 </motion.div>
                 <motion.div

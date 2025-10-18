@@ -65,14 +65,9 @@ const Footer = () => {
         <Row>
           <Col lg={3} md={6} sm={12}>
             <div className="footer-widget">
-              <div className="footer-logo mb-4">
+              <div className="footer-logo mb-4 mt-3">
                 <Link to="/">
-                  <div className="d-flex align-items-center">
-                    <div className="logo-icon footer-logo-icon">
-                      <span>E</span>
-                    </div>
-                    <div className="brand-text ms-2">EduForge</div>
-                  </div>
+                  <img src="/eduforge.svg" alt="EduForge Logo" style={{ height: '60px', width: 'auto'}} />
                 </Link>
               </div>
               <p className="footer-desc mb-4">
@@ -80,7 +75,7 @@ const Footer = () => {
               </p>
               <div className="footer-social">
                 <motion.a 
-                  href="https://facebook.com" 
+                  href="https://www.facebook.com/profile.php?id=61581901205228" 
                   target="_blank"
                   rel="noopener noreferrer"
                   variants={socialIconVariants}
@@ -90,7 +85,7 @@ const Footer = () => {
                   <FaFacebookF />
                 </motion.a>
                 <motion.a 
-                  href="https://twitter.com" 
+                  href="https://x.com/Edu_Forge" 
                   target="_blank"
                   rel="noopener noreferrer"
                   variants={socialIconVariants}
@@ -100,7 +95,7 @@ const Footer = () => {
                   <FaTwitter />
                 </motion.a>
                 <motion.a 
-                  href="https://instagram.com" 
+                  href="https://www.instagram.com/eduforgetechnology/" 
                   target="_blank"
                   rel="noopener noreferrer"
                   variants={socialIconVariants}
@@ -110,7 +105,7 @@ const Footer = () => {
                   <FaInstagram />
                 </motion.a>
                 <motion.a 
-                  href="https://linkedin.com" 
+                  href="https://www.linkedin.com/in/eduforge/" 
                   target="_blank"
                   rel="noopener noreferrer"
                   variants={socialIconVariants}

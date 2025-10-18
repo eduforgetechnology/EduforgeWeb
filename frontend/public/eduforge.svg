@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 320" width="1200" height="320">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 320" width="1400" height="320">
   <defs>
     <!-- Define gradients for depth -->
     <linearGradient id="gearGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0077B5;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#005A8C;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#0099DD;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0077BB;stop-opacity:1" />
     </linearGradient>
   </defs>
   
@@ -74,12 +74,12 @@
   </g>
   
   <!-- Text: "Edu Forge" -->
-  <text x="420" y="195" font-family="'Arial Black', 'Arial Bold', Arial, sans-serif" font-size="105" font-weight="900" fill="#0077B5" letter-spacing="-2">
+  <text x="420" y="180" font-family="'Arial Black', 'Arial Bold', Arial, sans-serif" font-size="105" font-weight="900" fill="#0099DD" letter-spacing="-2">
     Edu Forge
   </text>
   
   <!-- Text: "LAUNCHING MINDS, REACHING STARS" -->
-  <text x="420" y="245" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="400" fill="#6D6E71" letter-spacing="0">
+  <text x="420" y="240" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="600" fill="#FFFFFF" letter-spacing="1">
     LAUNCHING MINDS, REACHING STARS
   </text>
 </svg>

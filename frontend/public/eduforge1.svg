@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 90" width="600" height="90" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <!-- Define gradients for depth -->
+    <linearGradient id="gearGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0099DD;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0077BB;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Gear/Cog with precise teeth -->
+  <g id="gear-assembly">
+    <!-- Main gear body -->
+    <circle cx="45" cy="45" r="32" fill="url(#gearGradient)"/>
+    
+    <!-- Gear teeth (12 teeth around the circle) -->
+    <g id="gear-teeth">
+      <!-- Top tooth -->
+      <rect x="41" y="9" width="8" height="10" fill="url(#gearGradient)" rx="1"/>
+      <!-- Top-right tooth -->
+      <rect x="59" y="15" width="8" height="10" fill="url(#gearGradient)" rx="1" transform="rotate(30 45 45)"/>
+      <!-- Right-top tooth -->
+      <rect x="70" y="28" width="8" height="10" fill="url(#gearGradient)" rx="1" transform="rotate(60 45 45)"/>
+      <!-- Right tooth -->
+      <rect x="73" y="41" width="10" height="8" fill="url(#gearGradient)" rx="1"/>
+      <!-- Right-bottom tooth -->
+      <rect x="70" y="56" width="8" height="10" fill="url(#gearGradient)" rx="1" transform="rotate(-60 45 45)"/>
+      <!-- Bottom-right tooth -->
+      <rect x="59" y="68" width="8" height="10" fill="url(#gearGradient)" rx="1" transform="rotate(-30 45 45)"/>
+      <!-- Bottom tooth -->
+      <rect x="41" y="71" width="8" height="10" fill="url(#gearGradient)" rx="1"/>
+      <!-- Bottom-left tooth -->
+      <rect x="27" y="68" width="8" height="10" fill="url(#gearGradient)" rx="1" transform="rotate(30 45 45)"/>
+      <!-- Left-bottom tooth -->
+      <rect x="16" y="56" width="8" height="10" fill="url(#gearGradient)" rx="1" transform="rotate(60 45 45)"/>
+      <!-- Left tooth -->
+      <rect x="7" y="41" width="10" height="8" fill="url(#gearGradient)" rx="1"/>
+      <!-- Left-top tooth -->
+      <rect x="16" y="28" width="8" height="10" fill="url(#gearGradient)" rx="1" transform="rotate(-60 45 45)"/>
+      <!-- Top-left tooth -->
+      <rect x="27" y="15" width="8" height="10" fill="url(#gearGradient)" rx="1" transform="rotate(-30 45 45)"/>
+    </g>
+    
+    <!-- Inner circle background -->
+    <circle cx="45" cy="45" r="23" fill="white"/>
+    <circle cx="45" cy="45" r="22" fill="white" stroke="#0077B5" stroke-width="1"/>
+  </g>
+  
+  <!-- Book/Learning icon -->
+  <g id="book-icon">
+    <!-- Open book with pages -->
+    <path d="M 45 33 L 30 35 L 30 57 L 45 55 Z" fill="#4DB8E8" stroke="#0077B5" stroke-width="0.8"/>
+    <path d="M 45 33 L 60 35 L 60 57 L 45 55 Z" fill="#4DB8E8" stroke="#0077B5" stroke-width="0.8"/>
+    
+    <!-- Book center spine -->
+    <line x1="45" y1="33" x2="45" y2="55" stroke="#0077B5" stroke-width="1.5"/>
+    
+    <!-- Page lines on left -->
+    <line x1="34" y1="41" x2="42" y2="40" stroke="white" stroke-width="1" opacity="0.7"/>
+    <line x1="34" y1="46" x2="42" y2="45" stroke="white" stroke-width="1" opacity="0.7"/>
+    <line x1="34" y1="51" x2="42" y2="50" stroke="white" stroke-width="1" opacity="0.7"/>
+    
+    <!-- Page lines on right -->
+    <line x1="48" y1="40" x2="56" y2="41" stroke="white" stroke-width="1" opacity="0.7"/>
+    <line x1="48" y1="45" x2="56" y2="46" stroke="white" stroke-width="1" opacity="0.7"/>
+    <line x1="48" y1="50" x2="56" y2="51" stroke="white" stroke-width="1" opacity="0.7"/>
+  </g>
+  
+  <!-- Crown/Spark element on top of book -->
+  <g id="crown-spark">
+    <polygon points="45,28 42,33 45,32 48,33" fill="#F89C31" stroke="#F89C31" stroke-width="0.5"/>
+    <polygon points="42,33 40,31 42,30" fill="#F89C31"/>
+    <polygon points="48,33 50,31 48,30" fill="#F89C31"/>
+    <circle cx="45" cy="32" r="1" fill="#F89C31"/>
+  </g>
+  
+  <!-- Text: "Edu Forge" -->
+  <text x="95" y="52" font-family="'Arial Black', 'Arial Bold', Arial, sans-serif" font-size="38" font-weight="900" fill="#0099DD" letter-spacing="-1">
+    Edu Forge
+  </text>
+  
+  <!-- Text: "LAUNCHING MINDS, REACHING STARS" -->
+  <text x="95" y="72" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF" letter-spacing="0.5">
+    LAUNCHING MINDS, REACHING STARS
+  </text>
+</svg>
