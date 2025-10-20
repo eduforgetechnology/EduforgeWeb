@@ -99,7 +99,7 @@ const About = () => {
             </Col>
             <Col md={6}>
               <motion.img
-                src="https://media.istockphoto.com/id/999232412/photo/teacher-with-male-pupils-building-robotic-vehicle-in-science-lesson.jpg?s=612x612&w=0&k=20&c=k7Z78mxTQrGDJqYx4aiH2aVS_jT-Zh6CNMIgRUjY-qI="
+                src="/img2.jpg"
                 alt="Company"
                 className="img-fluid rounded shadow"
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -380,7 +380,7 @@ const About = () => {
                 <Card.Body>
                   <Card.Title>Contact Us</Card.Title>
                   <p><strong>Email:</strong> lokesh@eduforge.co</p>
-                  <p><strong>Phone:</strong> +1 (555) 123-4567</p>
+                  <p><strong>Phone:</strong> +91 9306230386</p>
                   <p><strong>Address:</strong> 31, Begampur, Malviya Nagar, Delhi NCR, India, PIN 110017</p>
                <Link to="/contact">
                   <Button variant="primary" size="lg">Send Message</Button>

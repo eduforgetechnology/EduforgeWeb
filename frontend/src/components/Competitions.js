@@ -75,8 +75,7 @@ const Competitions = () => {
           </Col>
           <Col md={6}>
             <motion.img
-              src="https://media.istockphoto.com/id/1357832129/photo/children-in-robotics-classes-celebrate-victory.webp?a=1&b=1&s=612x612&w=0&k=20&c=1BSDorwTdUVn7fNRts4kctvVJfbV__q39rveiS4UV5c="
-              alt="Students participating in robotics competition"
+              src="/img1.jpg"
               className="img-fluid rounded"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}

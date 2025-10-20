@@ -163,9 +163,10 @@ const Home = () => {
                 className="text-center"
               >
                 <img
-                  src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=400&fit=crop"
+                  src="/img3.jpg"
                   alt="Students learning"
                   className="img-fluid rounded-lg shadow-lg"
+                  style={{ maxHeight: '500px', objectFit: 'cover' }}
                 />
               </motion.div>
             </Col>
