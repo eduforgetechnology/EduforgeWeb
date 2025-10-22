@@ -168,10 +168,10 @@ const AIAssistant = () => {
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
             <Card className="ai-assistant-card">
-              <Card.Header className="d-flex justify-content-between align-items-center">
+              <Card.Header className="d-flex justify-content-between align-items-center" style={{ background: "#4263eb" }}>
                 <div className="d-flex align-items-center">
                   <FaRobot className="me-2" />
-                  <h5 className="mb-0">EduAssist</h5>
+                  <h5 className="mb-0 text-white">EduAssist</h5>
                 </div>
                 <Button 
                   variant="link" 
@@ -213,11 +213,20 @@ const AIAssistant = () => {
                       placeholder="Type your message..."
                       value={inputMessage}
                       onChange={handleInputChange}
+                      className="border border-dark"
                     />
                     <Button 
-                      variant="primary" 
                       type="submit"
                       disabled={!inputMessage.trim() || isTyping}
+                      style={{
+                        background: "#4263eb",
+                        border: "1px solid #4263eb",
+                        color: "white",
+                        opacity: "1",
+                        boxShadow: "none",
+                        transition: "none"
+                      }}
+                      className="rounded-0 rounded-end"
                     >
                       {isTyping ? <FaSpinner className="fa-spin" /> : <FaPaperPlane />}
                     </Button>

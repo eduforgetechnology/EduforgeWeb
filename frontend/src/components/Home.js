@@ -117,7 +117,7 @@ const Home = () => {
         variants={heroVariants}
       >
         <Container>
-          <Row className="align-items-center py-3 py-md-5 py-lg-3">
+          <Row className="align-items-center py-1 py-md-0 py-lg-0">
             <Col md={6}>
               <motion.h1
                 className="display-4 fw-bold text-white"

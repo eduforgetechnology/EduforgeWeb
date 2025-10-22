@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Form, Button, Container, Row, Col, Alert, Card, InputGroup } from 'react-bootstrap';
 import { motion } from 'framer-motion';
@@ -10,9 +10,27 @@ const Login = () => {
   const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formErrors, setFormErrors] = useState({});
   const { login, register } = useContext(AuthContext);
   const navigate = useNavigate();
+  
+  // Effect to disable browser's built-in password reveal buttons
+  useEffect(() => {
+    // Add CSS to hide browser's reveal password button
+    const style = document.createElement('style');
+    style.textContent = `
+      input::-ms-reveal,
+      input::-ms-clear {
+        display: none;
+      }
+    `;
+    document.head.appendChild(style);
+    
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
 
   const validateForm = () => {
     const errors = {};
@@ -90,6 +108,8 @@ const Login = () => {
     setError('');
     setSuccess('');
     setFormErrors({});
+    setShowPassword(false);
+    setShowConfirmPassword(false);
   };
 
   const containerVariants = {
@@ -131,8 +151,8 @@ const Login = () => {
           <Col lg={5} md={8} sm={10}>
             <motion.div variants={formVariants}>
               <Card className="border-0 shadow-lg">
-                <Card.Header className="bg-primary-gradient text-white text-center py-4">
-                  <h3 className="mb-0">
+                <Card.Header className="bg-primary-gradient text-center py-4">
+                  <h3 className="mb-0 text-white">
                     {form.isRegister ? 'Create Your Account' : 'Welcome Back'}
                   </h3>
                 </Card.Header>
@@ -168,7 +188,7 @@ const Login = () => {
                       <Form.Group className="mb-3">
                         <Form.Label>Full Name</Form.Label>
                         <InputGroup hasValidation>
-                          <InputGroup.Text>
+                          <InputGroup.Text className="border border-dark rounded-0 rounded-start">
                             <i className="fas fa-user"></i>
                           </InputGroup.Text>
                           <Form.Control
@@ -178,7 +198,7 @@ const Login = () => {
                             value={form.name}
                             onChange={handleChange}
                             isInvalid={!!formErrors.name}
-                            className="border-start-0"
+                            className="border border-dark rounded-0 rounded-end"
                           />
                           {formErrors.name && (
                             <Form.Control.Feedback type="invalid">
@@ -192,7 +212,7 @@ const Login = () => {
                     <Form.Group className="mb-3">
                       <Form.Label>Email address</Form.Label>
                       <InputGroup hasValidation>
-                        <InputGroup.Text>
+                        <InputGroup.Text className="border border-dark rounded-0 rounded-start">
                           <i className="fas fa-envelope"></i>
                         </InputGroup.Text>
                         <Form.Control
@@ -202,7 +222,7 @@ const Login = () => {
                           value={form.email}
                           onChange={handleChange}
                           isInvalid={!!formErrors.email}
-                          className="border-start-0"
+                          className="border border-dark rounded-0 rounded-end"
                         />
                         {formErrors.email && (
                           <Form.Control.Feedback type="invalid">
@@ -214,8 +234,8 @@ const Login = () => {
                     
                     <Form.Group className="mb-3">
                       <Form.Label>Password</Form.Label>
-                      <InputGroup hasValidation>
-                        <InputGroup.Text>
+                      <InputGroup hasValidation className="position-relative">
+                        <InputGroup.Text className="border border-dark rounded-0 rounded-start">
                           <i className="fas fa-lock"></i>
                         </InputGroup.Text>
                         <Form.Control
@@ -225,15 +245,22 @@ const Login = () => {
                           value={form.password}
                           onChange={handleChange}
                           isInvalid={!!formErrors.password}
-                          className="border-start-0 border-end-0"
+                          className="border border-dark rounded-0 rounded-end pe-5"
+                          autoComplete={form.isRegister ? "new-password" : "current-password"}
                         />
-                        <Button 
-                          variant="outline-secondary"
+                        <span
+                          className="position-absolute"
+                          style={{
+                            right: "10px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            cursor: "pointer",
+                            zIndex: 5
+                          }}
                           onClick={() => setShowPassword(!showPassword)}
-                          className="border-start-0"
                         >
                           <i className={`fas fa-${showPassword ? "eye-slash" : "eye"}`}></i>
-                        </Button>
+                        </span>
                         {formErrors.password && (
                           <Form.Control.Feedback type="invalid">
                             {formErrors.password}
@@ -245,19 +272,33 @@ const Login = () => {
                     {form.isRegister && (
                       <Form.Group className="mb-3">
                         <Form.Label>Confirm Password</Form.Label>
-                        <InputGroup hasValidation>
-                          <InputGroup.Text>
+                        <InputGroup hasValidation className="position-relative">
+                          <InputGroup.Text className="border border-dark rounded-0 rounded-start">
                             <i className="fas fa-lock"></i>
                           </InputGroup.Text>
                           <Form.Control
-                            type="password"
+                            type={showConfirmPassword ? "text" : "password"}
                             name="confirmPassword"
                             placeholder="Confirm your password"
                             value={form.confirmPassword}
                             onChange={handleChange}
                             isInvalid={!!formErrors.confirmPassword}
-                            className="border-start-0"
+                            className="border border-dark rounded-0 rounded-end pe-5"
+                            autoComplete="new-password"
                           />
+                          <span
+                            className="position-absolute"
+                            style={{
+                              right: "10px",
+                              top: "50%",
+                              transform: "translateY(-50%)",
+                              cursor: "pointer",
+                              zIndex: 5
+                            }}
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          >
+                            <i className={`fas fa-${showConfirmPassword ? "eye-slash" : "eye"}`}></i>
+                          </span>
                           {formErrors.confirmPassword && (
                             <Form.Control.Feedback type="invalid">
                               {formErrors.confirmPassword}

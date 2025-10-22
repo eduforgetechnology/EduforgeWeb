@@ -9,6 +9,13 @@
 }
 
 /* Responsive navbar height */
+@media (max-width: 1500px) {
+  .navbar-main {
+    height: 70px;
+  }
+}
+
+
 @media (max-width: 991px) {
   .navbar-main {
     height: 85px;
@@ -23,19 +30,19 @@
 
 @media (max-width: 575px) {
   .navbar-main {
-    height: 70px;
+    height: 80px;
   }
 }
 
 @media (max-width: 479px) {
   .navbar-main {
-    height: 65px;
+    height: 70px;
   }
 }
 
 @media (max-width: 320px) {
   .navbar-main {
-    height: 60px;
+    height: 63px;
   }
 }
 

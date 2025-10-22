@@ -3,8 +3,19 @@
 .about-container {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
-  padding: 2rem 0;
+  padding: 1rem 0;
 }
+
+
+
+@media (min-width:350px) {
+  .about-container {
+    padding: 0.18rem 0;
+  }
+}
+
+
+
 
 .about-hero-section {
   background: var(--primary-gradient);

@@ -294,7 +294,7 @@ const Courses = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
               >
-                <h1 className="display-4 fw-bold mb-4">Expand Your Knowledge</h1>
+                <h1 className="display-4 fw-bold mb-4 text-white">Expand Your Knowledge</h1>
                 <p className="lead mb-4">
                   Browse our wide range of courses in electronics, robotics, and computer science.
                   Learn at your own pace and advance your skills with expert guidance.

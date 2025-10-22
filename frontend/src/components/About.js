@@ -60,7 +60,7 @@ const About = () => {
     <div className="about-container">
       {/* Hero Section */}
       <motion.div
-        className="about-hero-section text-white py-2 py-md-5"
+        className="about-hero-section text-white py-4 py-md-4"
         style={{ background: 'var(--primary-gradient)' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -91,9 +91,9 @@ const About = () => {
                 transition={{ delay: 1, duration: 1 }}
                 className="mb-4"
               >
-                <Button variant="light" size="lg" className="text-primary fw-bold bg-white me-3">Learn More</Button>
+                <Button variant="light" size="sm" className="text-primary fw-bold bg-white me-3 ">Learn More</Button>
                 <Link to="/contact">
-                  <Button variant="outline-light" size="lg">Send Message</Button>
+                  <Button variant="outline-light" size="sm">Send Message</Button>
                 </Link>
               </motion.div>
             </Col>

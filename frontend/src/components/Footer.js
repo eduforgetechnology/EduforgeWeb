@@ -166,19 +166,25 @@ const Footer = () => {
               <h4 className="widget-title">Contact Info</h4>
               <ul className="footer-contact-info">
                 <li>
-                  <FaMapMarkerAlt className="contact-icon" />
+                  <div className="contact-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <FaMapMarkerAlt size={20} style={{ color: 'white' }} />
+                  </div>
                   <div className="contact-text">
                    31, Begampur, Malviya Nagar, Delhi NCR, India, PIN 110017
                   </div>
                 </li>
                 <li>
-                  <FaPhoneAlt className="contact-icon" />
+                  <div className="contact-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <FaPhoneAlt size={20} style={{ color: 'white' }} />
+                  </div>
                   <div className="contact-text">
                     <a href="tel:+11234567890">+91 9306230386</a>
                   </div>
                 </li>
                 <li>
-                  <FaEnvelope className="contact-icon" />
+                  <div className="contact-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <FaEnvelope size={20} style={{ color: 'white' }} />
+                  </div>
                   <div className="contact-text">
                     <a href="mailto:info@eduforge.com">lokesh@eduforge.co</a>
                   </div>
