@@ -230,33 +230,44 @@ const About = () => {
           <h2 className="text-center mb-4 text-white fw-bold fs-1">Meet Our CEO</h2>
           <Row className="justify-content-center">
             <Col lg={8}>
-              <Card className="about-ceo-card shadow-lg border-0">
+              <Card className="about-ceo-card shadow-lg border-0 mt-5">
                 <Card.Body className="p-5">
                   <Row className="align-items-center">
-                    <Col md={4} className="text-center mb-4 mb-md-0">
+                    <Col md={12} className="text-center">
                       <motion.div
                         initial={{ scale: 0 }}
                         whileInView={{ scale: 1 }}
                         transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
+                        className="d-flex justify-content-center"
                       >
                         <div className="about-ceo-avatar mx-auto">
-                          <span className="about-ceo-initials">LS</span>
+                          <img 
+                            src="/ceo-img.png" 
+                            alt="Lokesh Sharma - CEO of EduForge" 
+                            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center', borderRadius: '50%' }}
+                          />
                         </div>
                       </motion.div>
                     </Col>
-                    <Col md={8}>
+                    <Col md={12}>
                       <motion.div
-                        initial={{ opacity: 0, x: 50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5 }}
                       >
-                        <h3 className="about-ceo-name mb-3">Lokesh Sharma</h3>
-                        <Badge className="about-ceo-badge mb-4">Founder & CEO, Eduforge.co</Badge>
+                        <h3 className="about-ceo-name mb-3 text-center">Lokesh Sharma</h3>
+                        <div className="text-center mb-4">
+                          <Badge className="about-ceo-badge">Founder & CEO, Eduforge.co</Badge>
+                        </div>
                         <blockquote className="about-ceo-quote mb-4">
                           "Education is not just about learning facts; it's about igniting curiosity, fostering innovation, and empowering the next generation to solve the world's most pressing challenges."
                         </blockquote>
                         <p className="about-ceo-description mb-4">
-                          A passionate educator and innovator dedicated to transforming STEM education through practical, hands-on learning experiences that prepare students for tomorrow's challenges.
+                         Lokesh Sharma is the Founder and CEO of EduForge, an EdTech company built on the belief that learning should be a forge for practical skills. A unique blend of a technologist and a qualified educator, he holds a Master's in Computer Science and a B.Ed. degree.
+
+                         His hands-on experience in building AI systems and conducting data analysis for fields like underwater robotics is matched by his direct work in the education ecosystem. Lokesh has not only implemented STEM curricula in schools like Pragya Girls School (Indore), DPWIS (Sikar) and Academic Heights World School Pitampura New Delhi but has also trained educators at institutions like Eicher School and Shemford Futuristic School in AI and Robotics.
+
+                         This rare intersection of high-tech skills and on-the-ground teaching experience is the core of EduForge. Under his leadership, the company empowers both students and educators with a project-based curriculum where they don't just learn about technology—they build, code, and innovate with it.
                         </p>
                         <div className="row g-2">
                           {achievements.map((achievement, index) => (

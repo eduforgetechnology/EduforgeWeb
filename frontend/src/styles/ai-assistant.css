@@ -2,7 +2,7 @@
 .ai-assistant-button {
   position: fixed;
   right: 30px;
-  bottom: 30px;
+  bottom: 40px;
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -25,7 +25,7 @@
 .ai-assistant-container {
   position: fixed;
   right: 30px;
-  bottom: 100px;
+  bottom: 130px;
   width: 350px;
   max-width: 90vw;
   z-index: 1000;
@@ -159,17 +159,60 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .ai-assistant-container {
+    right: 25px;
+    bottom: 130px;
+  }
+  
+  .ai-assistant-button {
+    right: 25px;
+    bottom: 40px;
+  }
+}
+
+/* Medium devices (tablets, between 768px and 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+  .ai-assistant-container {
+    right: 25px;
+    bottom: 130px;
+  }
+  
+  .ai-assistant-button {
+    right: 25px;
+    bottom: 48px;
+  }
+}
+
+/* Small devices (landscape phones, between 576px and 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .ai-assistant-container {
+    right: 20px;
+    bottom: 125px;
+    width: 320px;
+  }
+  
+  .ai-assistant-button {
+    right: 20px;
+    bottom: 48px;
+    width: 55px;
+    height: 55px;
+  }
+}
+
+/* Extra small devices (phones, less than 576px) */
 @media (max-width: 576px) {
   .ai-assistant-container {
     right: 15px;
     left: 15px;
     width: auto;
-    bottom: 90px;
+    bottom: 100px;
   }
   
   .ai-assistant-button {
-    right: 15px;
-    bottom: 15px;
+    right: 10px;
+    bottom:40px;
     width: 50px;
     height: 50px;
     font-size: 20px;

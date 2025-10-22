@@ -7,11 +7,7 @@
 }
 
 .competitions-header {
-  background: linear-gradient(45deg, #ffd700, #83255f, #084452, #152778);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: none;
+  color: white;
   font-size: 3rem;
   font-weight: bold;
   margin-bottom: 2rem;
@@ -41,16 +37,30 @@
 }
 
 .competition-card-img {
-  height: 200px;
+  height: 180px;
   width: 100%;
   object-fit: contain;
   transition: transform 0.3s ease;
   max-width: 100%;
   background-color: #f8f9fa;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 5px solid rgb(206, 24, 166);
 }
 
 .competition-card:hover .competition-card-img {
   transform: scale(1.05);
+}
+
+.competition-image-container {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #f8f9fa;
 }
 
 .competition-card-body {
@@ -104,6 +114,7 @@
   text-align: center;
   margin-bottom: 2rem;
   font-weight: bold;
+  color: white;
 }
 
 .participate-steps {
@@ -167,6 +178,7 @@
 .cta-title {
   font-weight: bold;
   margin-bottom: 1rem;
+  color: white;
 }
 
 .cta-text {

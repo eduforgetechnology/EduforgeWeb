@@ -17,6 +17,10 @@ import AIAssistant from './components/AIAssistant';
 import CourseDetails from './components/CourseDetails';
 import ProtectedRoute from './components/ProtectedRoute';
 import ScrollToTop from './components/ScrollToTop';
+import PrivacyPolicy from './components/PrivacyPolicy';
+import TermsOfService from './components/TermsOfService';
+import FAQ from './components/FAQ';
+import PrivacyNotification from './components/PrivacyNotification';
 import './App.css';
 
 function App() {
@@ -40,12 +44,16 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/services" element={<Services />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
+            <Route path="/faq" element={<FAQ />} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           </Routes>
         </div>
 
         <Footer />
         <AIAssistant />
+        <PrivacyNotification />
       </div>
     </Router>
   );

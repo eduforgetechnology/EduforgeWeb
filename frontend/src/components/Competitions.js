@@ -91,7 +91,7 @@ const Competitions = () => {
         whileInView={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        <h3 className="text-center mb-4">Upcoming Competitions</h3>
+        <h3 className="text-center mb-4 text-white">Upcoming Competitions</h3>
         <Row>
           {upcomingCompetitions.map((comp, index) => (
             <Col md={4} key={index} className="mb-4">
@@ -102,7 +102,9 @@ const Competitions = () => {
                 whileHover={{ scale: 1.05 }}
               >
                 <Card className="competition-card h-100">
-                  <Card.Img variant="top" src={comp.image} alt={comp.title} className="competition-card-img" />
+                  <div className="competition-image-container">
+                    <Card.Img variant="top" src={comp.image} alt={comp.title} className="competition-card-img" />
+                  </div>
                   <Card.Body className="competition-card-body">
                     <Card.Title className="competition-card-title">
                       <FaRocket className="me-2" style={{color: '#ff6b6b'}} />
@@ -195,7 +197,7 @@ const Competitions = () => {
         whileInView={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1 }}
       >
-        <h3 className="cta-title">Ready to Compete?</h3>
+        <h3 className="cta-title text-white">Ready to Compete?</h3>
         <p className="cta-text">Don't miss out on the opportunity to challenge yourself and win prizes.</p>
         <Button className="cta-btn">View All Competitions</Button>
       </motion.div>
