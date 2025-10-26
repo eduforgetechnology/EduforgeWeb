@@ -485,10 +485,10 @@ const Courses = () => {
                           </div>
                         </div>
                         
-                        <Card.Title className="mb-2">{course.title}</Card.Title>
+                        <Card.Title className="mb-2">{course.title || 'Untitled Course'}</Card.Title>
                         <Card.Text className="text-muted small mb-3">
-                          {course.description.substring(0, 100)}
-                          {course.description.length > 100 ? '...' : ''}
+                          {course.description ? course.description.substring(0, 100) : 'No description available'}
+                          {course.description && course.description.length > 100 ? '...' : ''}
                         </Card.Text>
                         
                         <div className="d-flex justify-content-between align-items-center mb-3">
@@ -505,9 +505,9 @@ const Courses = () => {
                               fontSize: '10px',
                               fontWeight: 'bold'
                             }}>
-                              {course.educator.name.charAt(0)}
+                              {course.educator?.name?.charAt(0) || 'T'}
                             </div>
-                            <small className="text-muted">{course.educator.name}</small>
+                            <small className="text-muted">{course.educator?.name || 'Instructor'}</small>
                           </div>
                           <small className="text-muted">
                             <i className="fas fa-users me-1"></i> 
@@ -683,7 +683,7 @@ const Courses = () => {
                     <div>
                       <h6 className="mb-0">
                         <i className="fas fa-play-circle me-2 text-primary"></i>
-                        {lesson.title}
+                        {lesson?.title || `Lesson ${idx + 1}`}
                       </h6>
                       <small className="text-muted">{(idx + 1) * 15} minutes</small>
                     </div>
@@ -693,7 +693,7 @@ const Courses = () => {
                   </div>
                   {idx === 0 && (
                     <p className="mb-0 mt-2 small">
-                      {lesson.content}
+                      {lesson?.content || 'Course content preview will be available here.'}
                     </p>
                   )}
                 </div>
