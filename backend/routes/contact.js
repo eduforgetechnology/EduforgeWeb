@@ -61,6 +61,7 @@ router.post('/', contactLimiter, async (req, res) => {
 
         // Sanitize inputs
         const sanitizedName = sanitizeInput(name);
+        const sanitizedEmail = email.toLowerCase().trim();
         const sanitizedSubject = sanitizeInput(subject);
         const sanitizedMessage = sanitizeInput(message);
         const sanitizedPhone = phone ? sanitizeInput(phone) : '';
@@ -81,12 +82,12 @@ router.post('/', contactLimiter, async (req, res) => {
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: process.env.EMAIL_RECIPIENT,
-            replyTo: email,
+            replyTo: sanitizedEmail,
             subject: `Contact Form: ${sanitizedSubject}`,
             html: `
                 <h3>New Contact Form Submission</h3>
                 <p><strong>Name:</strong> ${sanitizedName}</p>
-                <p><strong>Email:</strong> ${email}</p>
+                <p><strong>Email:</strong> ${sanitizedEmail}</p>
                 <p><strong>Phone Number:</strong> ${sanitizedPhone || 'Not provided'}</p>
                 <p><strong>School/Institution:</strong> ${sanitizedInstitution || 'Not provided'}</p>
                 <p><strong>Subject:</strong> ${sanitizedSubject}</p>

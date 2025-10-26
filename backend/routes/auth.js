@@ -14,8 +14,11 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'Please provide name, email and password' });
     }
     
+    // Normalize email to lowercase
+    const normalizedEmail = email.toLowerCase().trim();
+    
     // Check if user exists
-    const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ email: normalizedEmail });
     if (userExists) {
       return res.status(400).json({ message: 'User with this email already exists' });
     }
@@ -24,7 +27,7 @@ router.post('/register', async (req, res) => {
     const validatedRole = ['student', 'educator'].includes(role) ? role : 'student';
     const user = await User.create({ 
       name, 
-      email, 
+      email: normalizedEmail, 
       password, 
       role: validatedRole 
     });
@@ -65,8 +68,11 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Please provide email and password' });
     }
     
+    // Normalize email to lowercase
+    const normalizedEmail = email.toLowerCase().trim();
+    
     // Check for user
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
@@ -125,7 +131,10 @@ router.post('/forgot-password', async (req, res) => {
       return res.status(400).json({ message: 'Please provide email address' });
     }
 
-    const user = await User.findOne({ email });
+    // Normalize email to lowercase
+    const normalizedEmail = email.toLowerCase().trim();
+
+    const user = await User.findOne({ email: normalizedEmail });
     if (!user) {
       return res.status(404).json({ message: 'No user found with this email address' });
     }
@@ -205,8 +214,11 @@ router.post('/verify-otp', async (req, res) => {
       return res.status(400).json({ message: 'Please provide email and OTP' });
     }
 
+    // Normalize email to lowercase
+    const normalizedEmail = email.toLowerCase().trim();
+
     const user = await User.findOne({
-      email,
+      email: normalizedEmail,
       resetPasswordOTPExpire: { $gt: Date.now() }
     });
 
