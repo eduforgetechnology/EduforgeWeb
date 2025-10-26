@@ -140,11 +140,14 @@ router.post('/forgot-password', async (req, res) => {
     const nodemailer = require('nodemailer');
     
     // Create transporter using your existing email configuration
-    const transporter = nodemailer.createTransporter({
+    const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASSWORD
+      },
+      tls: {
+        rejectUnauthorized: process.env.NODE_ENV === 'production'
       }
     });
 
@@ -170,9 +173,7 @@ router.post('/forgot-password', async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'Password reset instructions sent to your email',
-      // For development/testing - remove in production
-      ...(process.env.NODE_ENV === 'development' && { otp, resetToken })
+      message: 'Password reset instructions sent to your email'
     });
 
   } catch (error) {
