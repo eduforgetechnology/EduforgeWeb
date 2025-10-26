@@ -23,7 +23,7 @@ const ResetPassword = () => {
     hasSpecial: false
   });
 
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL ;
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
 
   useEffect(() => {
     const tokenFromUrl = searchParams.get('token');
@@ -66,7 +66,7 @@ const ResetPassword = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
