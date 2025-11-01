@@ -27,7 +27,15 @@ const corsOptions = {
     console.log('Origin:', origin);
     console.log('CORS_ORIGIN env:', process.env.CORS_ORIGIN);
     
-    const corsOriginString = process.env.CORS_ORIGIN || 'https://www.eduforge.co,https://eduforge.co,https://eduforge-web-frontend.vercel.app,http://localhost:3000';
+    // Hardcode allowed origins to ensure they work in production
+    const defaultOrigins = [
+      'https://www.eduforge.co',
+      'https://eduforge.co', 
+      'https://eduforge-web-frontend.vercel.app',
+      'http://localhost:3000'
+    ];
+    
+    const corsOriginString = process.env.CORS_ORIGIN || defaultOrigins.join(',');
     const allowedOrigins = corsOriginString.split(',').map(o => o.trim().replace(/\/$/, ''));
     
     console.log('Allowed Origins:', allowedOrigins);
