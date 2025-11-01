@@ -38,14 +38,21 @@ const seedData = async () => {
       imageUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80'
     });
 
-    // Create admin user
-    const admin = await User.create({
-      name: 'Admin User',
-      email: 'admin@eduforge.com',
-      password: 'admin123',
-      role: 'admin',
-      imageUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e'
-    });
+    // Create admin user (check if exists first)
+    let admin = await User.findOne({ email: 'admin@eduforge.com' });
+    if (!admin) {
+      admin = await User.create({
+        name: 'Admin User',
+        email: 'admin@eduforge.com',
+        password: 'admin123',
+        role: 'admin',
+        imageUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e'
+      });
+    } else {
+      // Ensure existing admin has correct role
+      admin.role = 'admin';
+      await admin.save();
+    }
 
     console.log('Created educators and admin...');
 
