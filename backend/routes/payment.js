@@ -6,11 +6,17 @@ const Course = require('../models/Course');
 const User = require('../models/User');
 const { protect } = require('../middleware/auth');
 
-// Initialize Razorpay
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET
-});
+// Initialize Razorpay only if credentials are provided
+let razorpay = null;
+if (process.env.RAZORPAY_KEY_ID && 
+    process.env.RAZORPAY_KEY_SECRET && 
+    process.env.RAZORPAY_KEY_ID !== 'rzp_test_your_key_id_here' &&
+    process.env.RAZORPAY_KEY_SECRET !== 'your_secret_key_here') {
+  razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET
+  });
+}
 
 // @route   POST /api/payment/create-order
 // @desc    Create a new payment order
@@ -19,6 +25,13 @@ router.post('/create-order', protect, async (req, res) => {
   try {
     const { courseId } = req.body;
     const userId = req.user.id;
+
+    // Check if Razorpay is configured
+    if (!razorpay) {
+      return res.status(503).json({ 
+        message: 'Payment service is currently unavailable. Razorpay not configured.' 
+      });
+    }
 
     // Get course details
     const course = await Course.findById(courseId);
@@ -87,6 +100,12 @@ router.post('/verify', protect, async (req, res) => {
 
     // Skip signature verification for free enrollments
     if (razorpay_order_id !== 'free_enrollment') {
+      // Check if Razorpay is configured for paid courses
+      if (!razorpay) {
+        return res.status(503).json({ 
+          message: 'Payment service is currently unavailable. Razorpay not configured.' 
+        });
+      }
       // Verify payment signature for paid courses
       const body = razorpay_order_id + "|" + razorpay_payment_id;
       const expectedSignature = crypto
