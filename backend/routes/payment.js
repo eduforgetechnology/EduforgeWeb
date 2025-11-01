@@ -4,7 +4,7 @@ const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const Course = require('../models/Course');
 const User = require('../models/User');
-const auth = require('../middleware/auth');
+const { protect } = require('../middleware/auth');
 
 // Initialize Razorpay
 const razorpay = new Razorpay({
@@ -15,7 +15,7 @@ const razorpay = new Razorpay({
 // @route   POST /api/payment/create-order
 // @desc    Create a new payment order
 // @access  Private
-router.post('/create-order', auth, async (req, res) => {
+router.post('/create-order', protect, async (req, res) => {
   try {
     const { courseId } = req.body;
     const userId = req.user.id;
@@ -74,7 +74,7 @@ router.post('/create-order', auth, async (req, res) => {
 // @route   POST /api/payment/verify
 // @desc    Verify payment and enroll user in course
 // @access  Private
-router.post('/verify', auth, async (req, res) => {
+router.post('/verify', protect, async (req, res) => {
   try {
     const { 
       razorpay_order_id, 
@@ -167,7 +167,7 @@ router.post('/verify', auth, async (req, res) => {
 // @route   GET /api/payment/enrolled-courses
 // @desc    Get all enrolled courses for a user
 // @access  Private
-router.get('/enrolled-courses', auth, async (req, res) => {
+router.get('/enrolled-courses', protect, async (req, res) => {
   try {
     const userId = req.user.id;
 
@@ -217,7 +217,7 @@ router.get('/enrolled-courses', auth, async (req, res) => {
 // @route   POST /api/payment/update-progress
 // @desc    Update course progress for enrolled student
 // @access  Private
-router.post('/update-progress', auth, async (req, res) => {
+router.post('/update-progress', protect, async (req, res) => {
   try {
     const { courseId, progress } = req.body;
     const userId = req.user.id;

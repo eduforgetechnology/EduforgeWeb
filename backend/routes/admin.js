@@ -7,7 +7,6 @@ const Course = require('../models/Course');
 const User = require('../models/User');
 const { adminOnly } = require('../middleware/adminAuth');
 const s3Service = require('../services/s3Service');
-const googleDriveService = require('../services/googleDriveService');
 
 // Configure multer storage
 const uploadDir = path.join(__dirname, '..', 'uploads');
@@ -192,56 +191,66 @@ router.post('/courses/:id/lessons', adminOnly, upload.fields([
       order: parseInt(order) || course.lessons.length + 1
     };
 
-    // Handle video file upload with Google Drive
+    // Handle video file upload with S3
     if (req.files && req.files.video) {
       const videoFile = req.files.video[0];
       
-      if (googleDriveService.isAvailable()) {
-        try {
-          const uploadResult = await googleDriveService.uploadFile(
-            videoFile.path,
+      try {
+        // Check if S3 service is available
+        if (s3Service.uploadFile) {
+          const fileBuffer = fs.readFileSync(videoFile.path);
+          const uploadResult = await s3Service.uploadFile(
+            fileBuffer,
             `${course.title}-${title}-video-${videoFile.originalname}`,
             videoFile.mimetype
           );
           
-          newLesson.videoUrl = uploadResult.directLink;
-          newLesson.videoEmbedUrl = googleDriveService.getEmbedUrl(uploadResult.fileId, videoFile.mimetype);
-          newLesson.videoFileId = uploadResult.fileId;
-          console.log('Video uploaded to Google Drive:', uploadResult.fileName);
-        } catch (error) {
-          console.error('Failed to upload video to Google Drive:', error);
+          newLesson.videoUrl = uploadResult.url;
+          newLesson.videoEmbedUrl = uploadResult.url;
+          newLesson.videoFileId = uploadResult.key;
+          console.log('Video uploaded to S3:', uploadResult.key);
+          
+          // Clean up temporary file
+          fs.unlinkSync(videoFile.path);
+        } else {
           // Fallback to local storage
           newLesson.videoUrl = `/uploads/${videoFile.filename}`;
         }
-      } else {
-        // Local storage fallback
+      } catch (error) {
+        console.error('Failed to upload video to S3:', error);
+        // Fallback to local storage
         newLesson.videoUrl = `/uploads/${videoFile.filename}`;
       }
     }
 
-    // Handle PPT file upload with Google Drive
+    // Handle PPT file upload with S3
     if (req.files && req.files.ppt) {
       const pptFile = req.files.ppt[0];
       
-      if (googleDriveService.isAvailable()) {
-        try {
-          const uploadResult = await googleDriveService.uploadFile(
-            pptFile.path,
+      try {
+        // Check if S3 service is available
+        if (s3Service.uploadFile) {
+          const fileBuffer = fs.readFileSync(pptFile.path);
+          const uploadResult = await s3Service.uploadFile(
+            fileBuffer,
             `${course.title}-${title}-ppt-${pptFile.originalname}`,
             pptFile.mimetype
           );
           
-          newLesson.pptUrl = uploadResult.directLink;
-          newLesson.pptEmbedUrl = googleDriveService.getEmbedUrl(uploadResult.fileId, pptFile.mimetype);
-          newLesson.pptFileId = uploadResult.fileId;
-          console.log('PPT uploaded to Google Drive:', uploadResult.fileName);
-        } catch (error) {
-          console.error('Failed to upload PPT to Google Drive:', error);
+          newLesson.pptUrl = uploadResult.url;
+          newLesson.pptEmbedUrl = `https://docs.google.com/gview?url=${encodeURIComponent(uploadResult.url)}&embedded=true`;
+          newLesson.pptFileId = uploadResult.key;
+          console.log('PPT uploaded to S3:', uploadResult.key);
+          
+          // Clean up temporary file
+          fs.unlinkSync(pptFile.path);
+        } else {
           // Fallback to local storage
           newLesson.pptUrl = `/uploads/${pptFile.filename}`;
         }
-      } else {
-        // Local storage fallback
+      } catch (error) {
+        console.error('Failed to upload PPT to S3:', error);
+        // Fallback to local storage
         newLesson.pptUrl = `/uploads/${pptFile.filename}`;
       }
     }
@@ -323,7 +332,7 @@ router.put('/courses/:courseId/lessons/:lessonId', adminOnly, async (req, res) =
 });
 
 // @route   POST /api/admin/upload
-// @desc    Upload course content files (video/PPT) to Google Drive
+// @desc    Upload course content files (video/PPT) to S3
 // @access  Private (Admin)
 router.post('/upload', adminOnly, upload.single('file'), async (req, res) => {
   try {
@@ -339,30 +348,36 @@ router.post('/upload', adminOnly, upload.single('file'), async (req, res) => {
     let embedUrl = null;
     let fileId = null;
 
-    // Try to upload to Google Drive
-    if (googleDriveService.isAvailable()) {
-      try {
-        const uploadResult = await googleDriveService.uploadFile(
-          req.file.path,
+    // Try to upload to S3
+    try {
+      if (s3Service.uploadFile) {
+        const fileBuffer = fs.readFileSync(req.file.path);
+        const uploadResult = await s3Service.uploadFile(
+          fileBuffer,
           `course-content-${req.file.originalname}`,
           req.file.mimetype
         );
         
-        fileUrl = uploadResult.directLink;
-        embedUrl = googleDriveService.getEmbedUrl(uploadResult.fileId, req.file.mimetype);
-        fileId = uploadResult.fileId;
+        fileUrl = uploadResult.url;
+        embedUrl = req.file.mimetype.includes('presentation') || req.file.mimetype.includes('powerpoint') ?
+          `https://docs.google.com/gview?url=${encodeURIComponent(uploadResult.url)}&embedded=true` :
+          uploadResult.url;
+        fileId = uploadResult.key;
         
-        console.log('File uploaded to Google Drive:', uploadResult.fileName);
-      } catch (driveError) {
-        console.error('Failed to upload to Google Drive, using local storage:', driveError);
-        // Keep the local file URL as fallback
+        console.log('File uploaded to S3:', uploadResult.key);
+        
+        // Clean up temporary file
+        fs.unlinkSync(req.file.path);
       }
+    } catch (s3Error) {
+      console.error('Failed to upload to S3, using local storage:', s3Error);
+      // Keep the local file URL as fallback
     }
 
     res.status(200).json({
       success: true,
-      message: googleDriveService.isAvailable() && fileId ? 
-        'File uploaded successfully to Google Drive' : 
+      message: fileId ? 
+        'File uploaded successfully to S3' : 
         'File uploaded successfully to local storage',
       fileUrl,
       embedUrl,
