@@ -23,19 +23,34 @@ app.set('trust proxy', 1);
 // Configure CORS for deployment
 const corsOptions = {
   origin: function(origin, callback) {
-    const allowedOrigins = (process.env.CORS_ORIGIN || '').split(',');
+    console.log('=== CORS DEBUG ===');
+    console.log('Origin:', origin);
+    console.log('CORS_ORIGIN env:', process.env.CORS_ORIGIN);
+    
+    const corsOriginString = process.env.CORS_ORIGIN || 'https://www.eduforge.co,https://eduforge.co,https://eduforge-web-frontend.vercel.app,http://localhost:3000';
+    const allowedOrigins = corsOriginString.split(',').map(o => o.trim().replace(/\/$/, ''));
+    
+    console.log('Allowed Origins:', allowedOrigins);
+    console.log('==================');
+    
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.indexOf(origin + '/') !== -1) {
+    
+    // Clean origin by removing trailing slash
+    const cleanOrigin = origin.replace(/\/$/, '');
+    
+    if (allowedOrigins.includes(origin) || allowedOrigins.includes(cleanOrigin)) {
+      console.log(`✅ Origin ${origin} ALLOWED`);
       return callback(null, true);
     } else {
-      console.log(`Origin ${origin} not allowed by CORS`);
-      return callback(null, true); // Allow all origins temporarily for debugging
+      console.log(`❌ Origin ${origin} NOT ALLOWED`);
+      return callback(null, true); // Still allow all for debugging
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
   credentials: true,
-  optionsSuccessStatus: 204
+  optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -187,6 +202,17 @@ app.get('/health', (req, res) => {
     status: 'ok',
     uptime: process.uptime(),
     timestamp: Date.now()
+  });
+});
+
+// Debug endpoint to check environment variables
+app.get('/api/debug/env', (req, res) => {
+  res.json({
+    NODE_ENV: process.env.NODE_ENV,
+    CORS_ORIGIN: process.env.CORS_ORIGIN,
+    PORT: process.env.PORT,
+    timestamp: new Date().toISOString(),
+    headers: req.headers.origin
   });
 });
 
