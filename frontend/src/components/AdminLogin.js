@@ -6,7 +6,7 @@ import axios from 'axios';
 import '../styles/adminLogin.css';
 
 const AdminLogin = () => {
-  const { user, login } = useContext(AuthContext);
+  const { user, setAuthData } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -67,10 +67,17 @@ const AdminLogin = () => {
       const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
       const response = await axios.post(`${apiUrl}/api/auth/login`, formData);
 
-      if (response.data.success && response.data.user.role === 'admin') {
-        login(response.data.user, response.data.token);
+      // Backend returns: { _id, name, email, role, token }
+      if (response.data && response.data.role === 'admin') {
+        const userData = {
+          _id: response.data._id,
+          name: response.data.name,
+          email: response.data.email,
+          role: response.data.role
+        };
+        setAuthData(userData, response.data.token);
         // Redirect will happen automatically via Navigate component
-      } else if (response.data.success && response.data.user.role !== 'admin') {
+      } else if (response.data && response.data.role !== 'admin') {
         setError('Access denied. Administrator privileges required.');
       } else {
         setError('Invalid credentials');

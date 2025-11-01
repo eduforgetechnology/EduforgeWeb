@@ -6,7 +6,8 @@ import { AuthContext } from '../context/AuthContext';
 import '../styles/admin-dashboard.css';
 
 const AdminPanel = () => {
-  const { token, user, logout } = useContext(AuthContext);
+  const { user, logout, getToken } = useContext(AuthContext);
+  const token = getToken();
   const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
   const [stats, setStats] = useState({

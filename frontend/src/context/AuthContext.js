@@ -60,8 +60,21 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  // Helper function to set user data directly (for admin login)
+  const setAuthData = (userData, token) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(userData));
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    setUser(userData);
+  };
+
+  // Helper function to get current token
+  const getToken = () => {
+    return localStorage.getItem('token');
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, register, logout, loading, setAuthData, getToken }}>
       {children}
     </AuthContext.Provider>
   );
