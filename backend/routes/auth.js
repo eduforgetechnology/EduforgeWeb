@@ -34,9 +34,6 @@ router.post('/register', async (req, res) => {
 
     // Generate JWT token
     const secret = process.env.JWT_SECRET;
-    if (!secret) {
-      console.warn('JWT_SECRET not set, using default secret');
-    }
     
     const token = jwt.sign(
       { id: user._id }, 
@@ -85,9 +82,6 @@ router.post('/login', async (req, res) => {
 
     // Generate JWT token
     const secret = process.env.JWT_SECRET;
-    if (!secret) {
-      console.warn('JWT_SECRET not set, using default secret');
-    }
     
     const token = jwt.sign(
       { id: user._id }, 
@@ -95,7 +89,6 @@ router.post('/login', async (req, res) => {
       { expiresIn: process.env.JWT_EXPIRE || '30d' }
     );
 
-    // Send response
     res.json({ 
       _id: user._id, 
       name: user.name, 

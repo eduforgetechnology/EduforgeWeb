@@ -20,7 +20,6 @@ const Dashboard = () => {
 
       try {
         const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
-        console.log('Dashboard - Fetching enrolled courses from:', `${apiUrl}/api/courses/enrolled`);
         
         const response = await axios.get(`${apiUrl}/api/courses/enrolled`, {
           headers: {
@@ -28,11 +27,9 @@ const Dashboard = () => {
           }
         });
         
-        console.log('Enrolled courses response:', response.data);
         setEnrolledCourses(response.data);
         setError(''); // Clear any previous errors
       } catch (err) {
-        console.error('Error loading enrolled courses:', err);
         setError('Failed to load enrolled courses. Please try refreshing the page.');
         setEnrolledCourses([]); // Reset courses on error
       } finally {

@@ -20,4 +20,4 @@ root.render(
 serviceWorkerRegistration.register();
 
 // Measure and report web vitals for performance monitoring
-reportWebVitals(console.log);
+reportWebVitals();

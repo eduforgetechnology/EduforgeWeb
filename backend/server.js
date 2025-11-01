@@ -4,10 +4,8 @@ const dotenv = require('dotenv');
 // Load environment variables - silent in production
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config({ path: path.resolve(__dirname, '.env') });
-  console.log('Environment loaded in development mode');
 } else {
   dotenv.config();
-  console.log('Running in production mode');
 }
 
 const express = require('express');
@@ -23,23 +21,14 @@ app.set('trust proxy', 1);
 // Configure CORS for deployment
 const corsOptions = {
   origin: function(origin, callback) {
-    console.log('=== CORS DEBUG ===');
-    console.log('Origin:', origin);
-    console.log('CORS_ORIGIN env:', process.env.CORS_ORIGIN);
+    // Get allowed origins from environment variable
+    const corsOriginString = process.env.CORS_ORIGIN;
     
-    // Hardcode allowed origins to ensure they work in production
-    const defaultOrigins = [
-      'https://www.eduforge.co',
-      'https://eduforge.co', 
-      'https://eduforge-web-frontend.vercel.app',
-      'http://localhost:3000'
-    ];
+    if (!corsOriginString) {
+      return callback(new Error('CORS not configured'));
+    }
     
-    const corsOriginString = process.env.CORS_ORIGIN || defaultOrigins.join(',');
     const allowedOrigins = corsOriginString.split(',').map(o => o.trim().replace(/\/$/, ''));
-    
-    console.log('Allowed Origins:', allowedOrigins);
-    console.log('==================');
     
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
@@ -48,11 +37,9 @@ const corsOptions = {
     const cleanOrigin = origin.replace(/\/$/, '');
     
     if (allowedOrigins.includes(origin) || allowedOrigins.includes(cleanOrigin)) {
-      console.log(`✅ Origin ${origin} ALLOWED`);
       return callback(null, true);
     } else {
-      console.log(`❌ Origin ${origin} NOT ALLOWED`);
-      return callback(null, true); // Still allow all for debugging
+      return callback(new Error('Not allowed by CORS'));
     }
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
@@ -88,13 +75,11 @@ app.use(async (req, res, next) => {
   // Ensure MongoDB is connected
   if (mongoose.connection.readyState !== 1) {
     try {
-      console.log('MongoDB not connected, attempting to connect before proceeding...');
       await connectDB();
       if (mongoose.connection.readyState !== 1) {
         return res.status(500).json({ message: 'Database connection not ready. Please try again.' });
       }
     } catch (err) {
-      console.error('Error connecting to MongoDB:', err);
       return res.status(500).json({ message: 'Failed to connect to database. Please try again.' });
     }
   }
@@ -114,12 +99,10 @@ let cachedDb = null;
 // Connect to MongoDB with retry logic
 const connectDB = async (retries = 5) => {
   if (cachedDb && mongoose.connection.readyState === 1) {
-    console.log('Using cached database connection');
     return true;
   }
 
   try {
-    console.log('Attempting to connect to MongoDB...');
     const options = {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -129,12 +112,9 @@ const connectDB = async (retries = 5) => {
 
     await mongoose.connect(mongoUri, options);
     cachedDb = mongoose.connection;
-    console.log('MongoDB connected successfully');
     return true;
   } catch (error) {
-    console.error('MongoDB connection error:', error);
     if (retries > 0) {
-      console.log(`Retrying connection... (${retries} attempts remaining)`);
       await new Promise(resolve => setTimeout(resolve, 2000));
       return connectDB(retries - 1);
     }
@@ -158,10 +138,8 @@ const connectDB = async (retries = 5) => {
     });
     
     cachedDb = conn;
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
     return true;
   } catch (error) {
-    console.error(`Error: ${error.message}`);
     return false;
   }
 };
@@ -213,17 +191,6 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Debug endpoint to check environment variables
-app.get('/api/debug/env', (req, res) => {
-  res.json({
-    NODE_ENV: process.env.NODE_ENV,
-    CORS_ORIGIN: process.env.CORS_ORIGIN,
-    PORT: process.env.PORT,
-    timestamp: new Date().toISOString(),
-    headers: req.headers.origin
-  });
-});
-
 // Error handling middleware
 app.use((req, res, next) => {
   res.status(404).json({ 
@@ -267,7 +234,6 @@ if (process.env.NODE_ENV !== 'production') {
         server.close(() => process.exit(1));
       });
     } else {
-      console.error('Failed to connect to MongoDB. Server not started.');
       process.exit(1);
     }
   });
@@ -278,7 +244,6 @@ if (process.env.NODE_ENV !== 'production') {
   // Connection initializer function
   const initializeConnection = async () => {
     if (!connectionPromise) {
-      console.log('Initializing new MongoDB connection');
       connectionPromise = connectDB();
     }
     return connectionPromise;
@@ -290,15 +255,14 @@ if (process.env.NODE_ENV !== 'production') {
       await initializeConnection();
       next();
     } catch (error) {
-      console.error('Failed to connect to MongoDB:', error);
       res.status(503).json({ message: 'Database connection failed. Please try again.' });
     }
   });
 
   // Initialize connection on cold start
   initializeConnection()
-    .then(() => console.log('MongoDB connection initialized for serverless environment'))
-    .catch(err => console.error('MongoDB connection failed in serverless environment:', err.message));
+    .then(() => {})
+    .catch(err => {});
 }
 
 // Properly handle uncaught errors in serverless environment

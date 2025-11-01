@@ -797,7 +797,7 @@ const LessonEditor = ({ show, onHide, course, lesson, onSave, uploadProgress }) 
       course._id,
       lesson?._id,
       submitFormData,
-      (progress) => console.log('Upload progress:', progress)
+      (progress) => {}
     );
   };
 

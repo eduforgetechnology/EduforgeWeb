@@ -6,23 +6,17 @@ const { protect } = require('../middleware/auth');
 // @route GET /api/courses
 router.get('/', async (req, res) => {
   try {
-    console.log('Received request for courses');
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 12;
     const skip = (page - 1) * limit;
     
-    console.log(`Fetching courses with limit: ${limit}, skip: ${skip}`);
-    
     const totalCourses = await Course.countDocuments();
-    console.log(`Total courses in database: ${totalCourses}`);
     
     const courses = await Course.find()
       .populate('educator', 'name')
       .skip(skip)
       .limit(limit)
       .lean();
-
-    console.log(`Found ${courses.length} courses`);
     
     res.json({
       courses,
@@ -91,8 +85,6 @@ router.post('/:id/enroll', protect, async (req, res) => {
 // @route GET /api/courses/enrolled
 router.get('/enrolled', protect, async (req, res) => {
   try {
-    console.log('Fetching enrolled courses for user:', req.user.id);
-    
     // Find courses where the user is in the enrolledStudents array
     const courses = await Course.find({
       'enrolledStudents.student': req.user.id
@@ -100,8 +92,6 @@ router.get('/enrolled', protect, async (req, res) => {
     .populate('educator', 'name email')
     .select('title description category level price duration imageUrl lessons enrolledStudents')
     .lean();
-
-    console.log(`Found ${courses.length} enrolled courses`);
     
     // Add enrollment info to each course
     const coursesWithEnrollmentInfo = courses.map(course => {

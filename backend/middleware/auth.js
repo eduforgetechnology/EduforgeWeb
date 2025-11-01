@@ -15,9 +15,6 @@ const protect = async (req, res, next) => {
       
       // Verify token
       const secret = process.env.JWT_SECRET;
-      if (!secret) {
-        console.error('WARNING: JWT_SECRET is not set. Using fallback secret.');
-      }
       
       const decoded = jwt.verify(token, secret || 'your_secure_jwt_secret_key_change_this_in_production');
       

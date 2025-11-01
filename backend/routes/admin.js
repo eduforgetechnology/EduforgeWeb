@@ -15,7 +15,7 @@ if (process.env.NODE_ENV !== 'production' && !fs.existsSync(uploadDir)) {
   try {
     fs.mkdirSync(uploadDir, { recursive: true });
   } catch (error) {
-    console.log('Could not create uploads directory, using memory storage:', error.message);
+    // Could not create uploads directory, using memory storage in production
   }
 }
 
@@ -206,7 +206,8 @@ router.post('/courses/:id/lessons', adminOnly, upload.fields([
       try {
         // Check if S3 service is available
         if (s3Service.uploadFile) {
-          const fileBuffer = fs.readFileSync(videoFile.path);
+          // Handle both memory storage (production) and disk storage (development)
+          const fileBuffer = videoFile.buffer || fs.readFileSync(videoFile.path);
           const uploadResult = await s3Service.uploadFile(
             fileBuffer,
             `${course.title}-${title}-video-${videoFile.originalname}`,
@@ -216,16 +217,16 @@ router.post('/courses/:id/lessons', adminOnly, upload.fields([
           newLesson.videoUrl = uploadResult.url;
           newLesson.videoEmbedUrl = uploadResult.url;
           newLesson.videoFileId = uploadResult.key;
-          console.log('Video uploaded to S3:', uploadResult.key);
           
-          // Clean up temporary file
-          fs.unlinkSync(videoFile.path);
+          // Clean up temporary file (only in development where file.path exists)
+          if (videoFile.path) {
+            fs.unlinkSync(videoFile.path);
+          }
         } else {
           // Fallback to local storage
           newLesson.videoUrl = `/uploads/${videoFile.filename}`;
         }
       } catch (error) {
-        console.error('Failed to upload video to S3:', error);
         // Fallback to local storage
         newLesson.videoUrl = `/uploads/${videoFile.filename}`;
       }
@@ -238,7 +239,8 @@ router.post('/courses/:id/lessons', adminOnly, upload.fields([
       try {
         // Check if S3 service is available
         if (s3Service.uploadFile) {
-          const fileBuffer = fs.readFileSync(pptFile.path);
+          // Handle both memory storage (production) and disk storage (development)
+          const fileBuffer = pptFile.buffer || fs.readFileSync(pptFile.path);
           const uploadResult = await s3Service.uploadFile(
             fileBuffer,
             `${course.title}-${title}-ppt-${pptFile.originalname}`,
@@ -248,16 +250,16 @@ router.post('/courses/:id/lessons', adminOnly, upload.fields([
           newLesson.pptUrl = uploadResult.url;
           newLesson.pptEmbedUrl = `https://docs.google.com/gview?url=${encodeURIComponent(uploadResult.url)}&embedded=true`;
           newLesson.pptFileId = uploadResult.key;
-          console.log('PPT uploaded to S3:', uploadResult.key);
           
-          // Clean up temporary file
-          fs.unlinkSync(pptFile.path);
+          // Clean up temporary file (only in development where file.path exists)
+          if (pptFile.path) {
+            fs.unlinkSync(pptFile.path);
+          }
         } else {
           // Fallback to local storage
           newLesson.pptUrl = `/uploads/${pptFile.filename}`;
         }
       } catch (error) {
-        console.error('Failed to upload PPT to S3:', error);
         // Fallback to local storage
         newLesson.pptUrl = `/uploads/${pptFile.filename}`;
       }
@@ -359,7 +361,8 @@ router.post('/upload', adminOnly, upload.single('file'), async (req, res) => {
     // Try to upload to S3
     try {
       if (s3Service.uploadFile) {
-        const fileBuffer = fs.readFileSync(req.file.path);
+        // Handle both memory storage (production) and disk storage (development)
+        const fileBuffer = req.file.buffer || fs.readFileSync(req.file.path);
         const uploadResult = await s3Service.uploadFile(
           fileBuffer,
           `course-content-${req.file.originalname}`,
@@ -372,13 +375,12 @@ router.post('/upload', adminOnly, upload.single('file'), async (req, res) => {
           uploadResult.url;
         fileId = uploadResult.key;
         
-        console.log('File uploaded to S3:', uploadResult.key);
-        
-        // Clean up temporary file
-        fs.unlinkSync(req.file.path);
+        // Clean up temporary file (only in development where file.path exists)
+        if (req.file.path) {
+          fs.unlinkSync(req.file.path);
+        }
       }
     } catch (s3Error) {
-      console.error('Failed to upload to S3, using local storage:', s3Error);
       // Keep the local file URL as fallback
     }
 
@@ -398,7 +400,6 @@ router.post('/upload', adminOnly, upload.single('file'), async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error uploading file:', error);
     res.status(500).json({ 
       success: false, 
       message: 'Error uploading file',
