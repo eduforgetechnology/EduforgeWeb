@@ -1,0 +1,128 @@
+/* Admin Panel Layout */
+.admin-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--admin-bg-primary);
+}
+
+/* Fixed Admin Navbar */
+.admin-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: var(--admin-glass-strong);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--admin-border);
+  z-index: 1030;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-md);
+}
+
+/* Main Content Area */
+.admin-main-content {
+  margin-top: 70px;
+  flex: 1;
+  padding: 2rem;
+  min-height: calc(100vh - 70px);
+}
+
+/* Table Styles */
+.table-hover tbody tr:hover {
+  background-color: var(--admin-bg-tertiary);
+  cursor: pointer;
+}
+
+.table th {
+  font-weight: 600;
+  color: var(--admin-text-secondary);
+  background: var(--admin-bg-secondary);
+  border-bottom: 2px solid var(--admin-border);
+  padding: 1rem;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 1rem;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--admin-border-light);
+}
+
+/* Card Styles */
+.admin-card {
+  background: var(--admin-glass-strong);
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-normal);
+}
+
+.admin-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Buttons */
+.admin-btn {
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: var(--transition-normal);
+}
+
+.admin-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Loading Overlay */
+.admin-loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1040;
+  backdrop-filter: blur(5px);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .admin-main-content {
+    padding: 1rem;
+  }
+
+  .admin-navbar {
+    padding: 0.5rem 1rem;
+  }
+
+  .table td, 
+  .table th {
+    padding: 0.75rem;
+  }
+
+  .btn-group .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Animation for Loading */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+  color: var(--admin-primary);
+}

@@ -1,0 +1,239 @@
+/* =====================================================
+   ADMIN LOGIN - PROFESSIONAL DESIGN
+   ===================================================== */
+
+/* CSS Variables for Login Page */
+:root {
+  --login-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --login-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --login-glass: rgba(255, 255, 255, 0.15);
+  --login-glass-border: rgba(255, 255, 255, 0.2);
+  --login-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --login-shadow-hover: 0 35px 60px -12px rgba(0, 0, 0, 0.35);
+}
+
+.admin-login-container {
+  background: var(--login-primary);
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-login-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.08) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.admin-login-container::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.03) 42%, rgba(255,255,255,0.03) 44%, transparent 46%),
+    linear-gradient(-45deg, transparent 40%, rgba(255,255,255,0.02) 42%, rgba(255,255,255,0.02) 44%, transparent 46%);
+  animation: loginGeometry 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes loginGeometry {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.admin-login-card {
+  border: none;
+  border-radius: 24px;
+  backdrop-filter: blur(30px) saturate(200%);
+  background: var(--login-glass);
+  border: 1px solid var(--login-glass-border);
+  box-shadow: var(--login-shadow);
+  position: relative;
+  z-index: 10;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.admin-login-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: var(--login-shadow-hover);
+  border-color: rgba(255,255,255,0.3);
+}
+
+.admin-login-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+  background-size: 200% 100%;
+  animation: gradient 3s ease infinite;
+}
+
+@keyframes gradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.admin-logo {
+  position: relative;
+}
+
+.admin-logo i {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.admin-title {
+  color: #2c3e50;
+  font-weight: 700;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.admin-label {
+  color: #495057;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.admin-input {
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  padding: 0.875rem 1rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.admin-input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-1px);
+}
+
+.admin-login-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-login-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.admin-login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.admin-login-btn:hover::before {
+  left: 100%;
+}
+
+.admin-login-btn:active {
+  transform: translateY(0);
+}
+
+.admin-login-btn:disabled {
+  opacity: 0.7;
+  transform: none;
+}
+
+.admin-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 1rem;
+  margin-top: 1.5rem;
+}
+
+.admin-access-denied {
+  padding: 2rem 0;
+}
+
+.admin-access-denied h3 {
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.admin-access-denied p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .admin-login-card {
+    margin: 1rem;
+    border-radius: 15px;
+  }
+  
+  .admin-title {
+    font-size: 1.75rem;
+  }
+  
+  .admin-login-btn {
+    font-size: 1rem;
+    padding: 0.875rem 1.5rem;
+  }
+}
+
+/* Animation for form elements */
+.admin-login-card .form-group {
+  animation: slideInUp 0.6s ease-out;
+}
+
+.admin-login-card .form-group:nth-child(1) { animation-delay: 0.1s; }
+.admin-login-card .form-group:nth-child(2) { animation-delay: 0.2s; }
+.admin-login-btn { animation: slideInUp 0.6s ease-out 0.3s both; }
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

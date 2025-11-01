@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://eduforge-web.vercel.app';
-      console.log('Login - API URL used:', apiUrl); // Debug logging
+
       const res = await axios.post(`${apiUrl}/api/auth/login`, credentials);
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data));
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://eduforge-web.vercel.app';
-      console.log('Register - API URL used:', apiUrl); // Debug logging
+
       const res = await axios.post(`${apiUrl}/api/auth/register`, userData);
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data));

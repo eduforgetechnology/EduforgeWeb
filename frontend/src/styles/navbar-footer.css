@@ -1,5 +1,9 @@
 /* Navbar Styles */
 .navbar-main {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   background: var(--bg-dark);
   transition: all var(--transition-medium);
   padding: 1.25rem 0;
@@ -8,17 +12,30 @@
   height: 100px;
 }
 
+/* Add padding to main content so it doesn't hide behind navbar */
+.main-content, .standalone-admin, .admin-main, .admin-content {
+  padding-top: 100px;
+  min-height: calc(100vh - 100px);
+}
+
 /* Responsive navbar height */
 @media (max-width: 1500px) {
   .navbar-main {
     height: 70px;
   }
+  .main-content, .standalone-admin, .admin-main, .admin-content {
+    padding-top: 70px;
+    min-height: calc(100vh - 70px);
+  }
 }
-
 
 @media (max-width: 991px) {
   .navbar-main {
     height: 85px;
+  }
+  .main-content, .standalone-admin, .admin-main, .admin-content {
+    padding-top: 85px;
+    min-height: calc(100vh - 85px);
   }
 }
 
@@ -26,11 +43,19 @@
   .navbar-main {
     height: 80px;
   }
+  .main-content, .standalone-admin, .admin-main, .admin-content {
+    padding-top: 80px;
+    min-height: calc(100vh - 80px);
+  }
 }
 
 @media (max-width: 575px) {
   .navbar-main {
     height: 80px;
+  }
+  .main-content, .standalone-admin, .admin-main, .admin-content {
+    padding-top: 80px;
+    min-height: calc(100vh - 80px);
   }
 }
 
@@ -38,7 +63,11 @@
   .navbar-main {
     height: 70px;
   }
-}
+  .main-content, .standalone-admin, .admin-main, .admin-content {
+    padding-top: 70px;
+    min-height: calc(100vh - 70px);
+  }}
+
 
 @media (max-width: 320px) {
   .navbar-main {

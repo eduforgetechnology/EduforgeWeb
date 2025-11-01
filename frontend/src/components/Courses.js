@@ -1,10 +1,13 @@
-import React, { useEffect, useState, useContext, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useContext, useRef, useCallback, useMemo } from 'react';
 import axios from 'axios';
 import { Container, Row, Col, Card, Button, Alert, Modal, Form, Badge, Spinner, InputGroup, Dropdown, DropdownButton } from 'react-bootstrap';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AuthContext } from '../context/AuthContext';
+import PaymentModal from './PaymentModal';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import { FixedSizeGrid as Grid } from 'react-window';
+import AutoSizer from 'react-virtualized-auto-sizer';
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
@@ -12,6 +15,7 @@ const Courses = () => {
   const [message, setMessage] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [enrollingCourses, setEnrollingCourses] = useState(new Set());
@@ -50,38 +54,42 @@ const Courses = () => {
     const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://eduforge-web.vercel.app';
     
     try {
-      const response = await axios.get(`${apiUrl}/api/courses?page=${page}&limit=12`);
+      // Check cache first
+      const cacheKey = `courses_${page}`;
+      const cachedData = sessionStorage.getItem(cacheKey);
+      
+      if (cachedData && !reset) {
+        const { courses: cachedCourses, timestamp } = JSON.parse(cachedData);
+        // Use cache if it's less than 5 minutes old
+        if (Date.now() - timestamp < 5 * 60 * 1000) {
+          if (reset) {
+            setCourses(cachedCourses);
+          } else {
+            setCourses(prevCourses => [...prevCourses, ...cachedCourses]);
+          }
+          setLoading(false);
+          return;
+        }
+      }
+
+      const response = await axios.get(`${apiUrl}/api/courses?page=${page}&limit=8`);
       const { courses: newCourses, currentPage, totalPages: totalPgs } = response.data;
       
-      // Process categories on the client side (this is much faster than before)
-      const processedCourses = newCourses.map((course, index) => {
-        if (!course.category) {
-          // Simpler category detection
-          const title = course.title?.toLowerCase() || "";
-          let category = "Personal Growth"; // Default category
-          
-          // Simplified category logic
-          if (title.match(/javascript|node|react|angular|vue|python|java|c\+\+|programming/)) {
-            category = "Development";
-          } else if (title.match(/marketing|seo|social media/)) {
-            category = "Marketing";
-          } else if (title.match(/design|ui|ux|photoshop/)) {
-            category = "Design";
-          } else if (title.match(/business|management|leadership/)) {
-            category = "Business";
-          }
-          
-          return {
-            ...course,
-            category,
-            rating: course.rating || "4.5",
-            students: course.students?.length || 75,
-            level: course.level || ['Beginner', 'Intermediate', 'Advanced'][index % 3]
-          };
-        }
-        return course;
-      });
+      // Process courses efficiently
+      const processedCourses = newCourses.map(course => ({
+        ...course,
+        rating: course.rating || "4.5",
+        students: course.students?.length || Math.floor(Math.random() * 100) + 50,
+        category: course.category || "Institute",
+        level: course.level || "All Levels"
+      }));
       
+      // Cache the results
+      sessionStorage.setItem(cacheKey, JSON.stringify({
+        courses: processedCourses,
+        timestamp: Date.now()
+      }));
+
       if (reset) {
         setCourses(processedCourses);
       } else {
@@ -109,95 +117,105 @@ const Courses = () => {
     };
   }, [loadCourses]);
 
-  // Debounce search to avoid excessive filtering
-  const debounce = (func, wait) => {
-    let timeout;
+  // Optimized debounce implementation with proper cleanup
+  const debounce = useCallback((func, wait) => {
+    let timeoutId = null;
     return (...args) => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func.apply(this, args), wait);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => {
+        func.apply(null, args);
+        timeoutId = null;
+      }, wait);
     };
-  };
-  
+  }, []);
+
   const handleSearchChange = useCallback(
     debounce((value) => {
-      setSearchTerm(value);
-    }, 300),
-    []
+      setSearchTerm(value.trim()); // Trim whitespace for more accurate searching
+    }, 400), // Increased slightly for better performance
+    [debounce]
   );
+
+  // Cleanup timeouts on unmount
+  useEffect(() => {
+    return () => {
+      const searchInput = document.querySelector('input[aria-label="Search courses"]');
+      if (searchInput) {
+        searchInput.value = '';
+      }
+    };
+  }, []);
   
   // Memoize filtering to improve performance
-  useEffect(() => {
-    // Only filter on the client side if we're not loading more data
-    if (!loading) {
-      // Apply filters and search more efficiently
-      const result = courses.filter(course => {
-        // Filter by search term
-        const matchesSearch = !searchTerm || 
-          course.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          course.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          course.educator?.name?.toLowerCase().includes(searchTerm.toLowerCase());
-          
-        // Filter by category
-        const matchesCategory = !filter || filter === 'all' || filter === 'All' || 
-          course.category === filter;
-          
-        return matchesSearch && matchesCategory;
-      });
-      
-      // Apply sorting
-      let sortedResults = [...result];
-      switch(sortBy) {
-        case 'newest':
-          sortedResults.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-          break;
-        case 'oldest':
-          sortedResults.sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
-          break;
-        case 'name_asc':
-          sortedResults.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
-          break;
-        case 'name_desc':
-          sortedResults.sort((a, b) => (b.title || '').localeCompare(a.title || ''));
-          break;
-        case 'popular':
-          sortedResults.sort((a, b) => (b.students || 0) - (a.students || 0));
-          break;
-        default:
-          break;
-      }
-      
-      setFilteredCourses(sortedResults);
-    }
-  }, [searchTerm, filter, sortBy, courses, loading]);
+  const filteredAndSortedCourses = useMemo(() => {
+    if (loading || !courses.length) return [];
 
-  const handleEnroll = async (id) => {
-    if (enrollingCourses.has(id)) return;
+    // Create a cached search term to avoid repeated toLowerCase() calls
+    const searchTermLower = searchTerm.toLowerCase();
+    const isAllCategory = !filter || filter.toLowerCase() === 'all';
     
-    setEnrollingCourses(prev => new Set([...prev, id]));
-    try {
-      const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://eduforge-web.vercel.app';
-      await axios.post(`${apiUrl}/api/courses/${id}/enroll`);
+    // Create a filtered array using efficient conditions
+    const filtered = courses.filter(course => {
+      // Exit early if possible
+      if (!isAllCategory && course.category !== filter) return false;
       
-      setMessage('You have successfully enrolled in this course!');
+      // If no search term and category matches, include the course
+      if (!searchTerm) return true;
       
-      // Update UI to show enrolled status
-      setCourses(prev => 
-        prev.map(course => 
-          course._id === id ? { ...course, enrolled: true } : course
-        )
-      );
+      // Search in relevant fields
+      const titleMatch = course.title?.toLowerCase().includes(searchTermLower);
+      if (titleMatch) return true; // Exit early if title matches
       
-      setTimeout(() => setMessage(''), 5000);
-    } catch (err) {
-      console.error('Error enrolling in course:', err);
-      setMessage(err.response?.data?.message || 'Error enrolling in course. Please try again.');
-    } finally {
-      setEnrollingCourses(prev => {
-        const next = new Set(prev);
-        next.delete(id);
-        return next;
-      });
+      const descMatch = course.description?.toLowerCase().includes(searchTermLower);
+      if (descMatch) return true; // Exit early if description matches
+      
+      return course.educator?.name?.toLowerCase().includes(searchTermLower);
+    });
+
+    // Sort courses only if needed
+    if (sortBy === 'none' || filtered.length <= 1) return filtered;
+
+    // Use efficient sorting
+    const sortedCourses = [...filtered]; // Create copy only when sorting
+    
+    // Use optimized comparison functions
+    const sortFunctions = {
+      newest: (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0),
+      oldest: (a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0),
+      name_asc: (a, b) => (a.title || '').localeCompare(b.title || ''),
+      name_desc: (a, b) => (b.title || '').localeCompare(a.title || ''),
+      popular: (a, b) => (b.students || 0) - (a.students || 0)
+    };
+
+    return sortedCourses.sort(sortFunctions[sortBy] || sortFunctions.newest);
+  }, [courses, searchTerm, filter, sortBy, loading]);
+
+  // Update filteredCourses when the memoized result changes
+  useEffect(() => {
+    setFilteredCourses(filteredAndSortedCourses);
+  }, [filteredAndSortedCourses]);
+
+  const handleEnroll = (courseId) => {
+    const course = courses.find(c => c._id === courseId);
+    if (course) {
+      setSelectedCourse(course);
+      setShowPaymentModal(true);
     }
+  };
+
+  const handleEnrollmentSuccess = (enrollmentData) => {
+    setMessage(`Successfully enrolled in ${enrollmentData.courseTitle}!`);
+    
+    // Update UI to show enrolled status
+    setCourses(prev => 
+      prev.map(course => 
+        course._id === enrollmentData.courseId ? { ...course, enrolled: true } : course
+      )
+    );
+    
+    setTimeout(() => setMessage(''), 5000);
   };
 
   const handleShowModal = (course) => {
@@ -210,12 +228,7 @@ const Courses = () => {
     setSelectedCourse(null);
   };
 
-  // Scroll to courses section when filtering
-  useEffect(() => {
-    if (!loading && filter !== 'all' && courseRef.current) {
-      courseRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }, [filter, loading]);
+  // Removed automatic scroll behavior that interferes with button clicks
 
   // Animation variants
   const containerVariants = {
@@ -490,6 +503,18 @@ const Courses = () => {
                           {course.description ? course.description.substring(0, 100) : 'No description available'}
                           {course.description && course.description.length > 100 ? '...' : ''}
                         </Card.Text>
+
+                        <div className="d-flex justify-content-between align-items-center mb-3">
+                          <div className="d-flex align-items-center">
+                            <span className="h5 mb-0 text-primary fw-bold">
+                              {course.price === 0 ? 'FREE' : `₹${course.price}`}
+                            </span>
+                          </div>
+                          <div className="text-end">
+                            <small className="text-muted d-block">{course.duration || '6 weeks'}</small>
+                            <small className="text-muted">{course.gradeRange || 'All Levels'}</small>
+                          </div>
+                        </div>
                         
                         <div className="d-flex justify-content-between align-items-center mb-3">
                           <div className="d-flex align-items-center">
@@ -537,7 +562,8 @@ const Courses = () => {
                                 </>
                               ) : (
                                 <>
-                                  <i className="fas fa-graduation-cap me-1"></i> Enroll
+                                  <i className="fas fa-graduation-cap me-1"></i> 
+                                  {course.price === 0 ? 'Enroll Free' : `Enroll - ₹${course.price}`}
                                 </>
                               )}
                             </Button>
@@ -712,10 +738,7 @@ const Courses = () => {
           {user && user.role === 'student' && selectedCourse && !selectedCourse.enrolled && (
             <Button 
               variant="primary" 
-              onClick={() => {
-                handleEnroll(selectedCourse._id);
-                handleCloseModal();
-              }}
+              onClick={() => handleEnroll(selectedCourse._id)}
               disabled={enrollingCourses.has(selectedCourse._id)}
             >
               <i className="fas fa-graduation-cap me-2"></i>
@@ -730,6 +753,14 @@ const Courses = () => {
           )}
         </Modal.Footer>
       </Modal>
+
+      {/* Payment Modal */}
+      <PaymentModal
+        show={showPaymentModal}
+        onHide={() => setShowPaymentModal(false)}
+        course={selectedCourse}
+        onEnrollmentSuccess={handleEnrollmentSuccess}
+      />
     </div>
   );
 };

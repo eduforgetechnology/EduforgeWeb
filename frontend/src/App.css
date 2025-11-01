@@ -6,6 +6,8 @@
 /* Global Reset & Base Styles */
 *, *::before, *::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html {
@@ -15,12 +17,9 @@ html {
 
 body {
   font-family: 'Inter', sans-serif;
-  margin: 0;
-  padding: 0;
   background-color: var(--bg-light);
   color: var(--text-color-dark);
   line-height: 1.6;
-  overflow-x: hidden;
 }
 
 .App {
@@ -752,6 +751,8 @@ a:hover {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--space-4);
+  width: 100%;
+  overflow-x: hidden;
 }
 
 /* Card enhancements */

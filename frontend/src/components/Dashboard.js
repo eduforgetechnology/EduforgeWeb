@@ -6,21 +6,42 @@ import { motion } from 'framer-motion';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const Dashboard = () => {
-  const { user, logout } = useContext(AuthContext);
+  const { user, token, logout } = useContext(AuthContext);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch enrolled courses (assuming backend has endpoint)
-    const apiUrl = process.env.REACT_APP_API_BASE_URL || 'https://eduforge-web.vercel.app';
-    console.log('Dashboard - API URL used:', apiUrl); // Debug logging
-    axios.get(`${apiUrl}/api/courses/enrolled`)
-      .then(res => setEnrolledCourses(res.data))
-      .catch(err => {
+    const fetchEnrolledCourses = async () => {
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const apiUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
+        console.log('Dashboard - Fetching enrolled courses from:', `${apiUrl}/api/courses/enrolled`);
+        
+        const response = await axios.get(`${apiUrl}/api/courses/enrolled`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        
+        console.log('Enrolled courses response:', response.data);
+        setEnrolledCourses(response.data);
+        setError(''); // Clear any previous errors
+      } catch (err) {
         console.error('Error loading enrolled courses:', err);
         setError('Failed to load enrolled courses. Please try refreshing the page.');
-      });
-  }, []);
+        setEnrolledCourses([]); // Reset courses on error
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEnrolledCourses();
+  }, [token]);
 
   // Dynamic chart data based on enrolled courses
   const chartData = useMemo(() => {
@@ -155,8 +176,16 @@ const Dashboard = () => {
           >
             Your Enrolled Courses
           </motion.h2>
-          {error && <Alert variant="danger">{error}</Alert>}
-          {enrolledCourses.length === 0 ? (
+          {loading ? (
+            <Alert variant="light" className="text-center">
+              <div className="spinner-border text-primary me-2" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              Loading your enrolled courses...
+            </Alert>
+          ) : error ? (
+            <Alert variant="danger">{error}</Alert>
+          ) : enrolledCourses.length === 0 ? (
             <Alert variant="info">You haven't enrolled in any courses yet.</Alert>
           ) : (
             enrolledCourses.map((course, index) => (

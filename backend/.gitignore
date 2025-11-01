@@ -65,3 +65,13 @@ coverage
 # Compiled binary addons
 /build
 /dist
+
+# User uploads (should not be committed to repository)
+uploads/
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.webm
+*.ppt
+*.pptx

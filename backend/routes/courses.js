@@ -88,4 +88,44 @@ router.post('/:id/enroll', protect, async (req, res) => {
   }
 });
 
+// @route GET /api/courses/enrolled
+router.get('/enrolled', protect, async (req, res) => {
+  try {
+    console.log('Fetching enrolled courses for user:', req.user.id);
+    
+    // Find courses where the user is in the enrolledStudents array
+    const courses = await Course.find({
+      'enrolledStudents.student': req.user.id
+    })
+    .populate('educator', 'name email')
+    .select('title description category level price duration imageUrl lessons enrolledStudents')
+    .lean();
+
+    console.log(`Found ${courses.length} enrolled courses`);
+    
+    // Add enrollment info to each course
+    const coursesWithEnrollmentInfo = courses.map(course => {
+      const enrollment = course.enrolledStudents.find(
+        enrollment => enrollment.student.toString() === req.user.id
+      );
+      
+      return {
+        ...course,
+        enrollmentDate: enrollment?.enrolledAt,
+        paymentStatus: enrollment?.paymentStatus,
+        progress: enrollment?.progress || 0
+      };
+    });
+
+    res.json(coursesWithEnrollmentInfo);
+  } catch (error) {
+    console.error('Error fetching enrolled courses:', error);
+    res.status(500).json({ 
+      success: false,
+      message: 'Error fetching enrolled courses',
+      error: error.message 
+    });
+  }
+});
+
 module.exports = router;

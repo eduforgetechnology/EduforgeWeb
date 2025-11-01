@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "aws-sdk": "^2.1692.0",
     "axios": "^1.12.2",
     "bootstrap": "^5.3.8",
     "framer-motion": "^12.23.24",
@@ -15,6 +16,8 @@
     "react-lazy-load-image-component": "^1.6.0",
     "react-router-dom": "^7.9.4",
     "react-scripts": "5.0.1",
+    "react-virtualized-auto-sizer": "^1.0.26",
+    "react-window": "^2.2.2",
     "recharts": "^3.2.1",
     "web-vitals": "^2.1.4",
     "workbox-core": "^7.0.0",

@@ -1,0 +1,223 @@
+/* Admin Layout Styles */
+:root {
+  --navbar-height: 70px;
+  --sidebar-width: 250px;
+}
+
+/* Main Layout */
+.admin-layout {
+  min-height: 100vh;
+  padding-top: var(--navbar-height);
+  background-color: var(--admin-bg-primary);
+}
+
+/* Navbar */
+.admin-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--navbar-height);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--admin-border);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1040;
+  box-shadow: var(--shadow-md);
+}
+
+/* Admin User Dropdown */
+.admin-navbar .dropdown-toggle {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: var(--admin-text-primary) !important;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.admin-navbar .dropdown-toggle:hover {
+  background-color: var(--admin-bg-hover) !important;
+}
+
+.admin-navbar .dropdown-toggle::after {
+  margin-left: 0.5rem;
+}
+
+.admin-navbar .dropdown-menu {
+  border: 1px solid var(--admin-border-light);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  padding: 0.5rem 0;
+  min-width: 220px;
+}
+
+.admin-navbar .dropdown-header {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--admin-border-light);
+}
+
+.admin-navbar .dropdown-item {
+  padding: 0.75rem 1rem;
+  color: var(--admin-text-primary);
+  transition: background-color 0.3s ease;
+}
+
+.admin-navbar .dropdown-item:hover {
+  background-color: var(--admin-bg-hover);
+  color: var(--admin-text-primary);
+}
+
+.admin-navbar .dropdown-item i {
+  width: 16px;
+  text-align: center;
+}
+
+/* Main Content Area */
+.admin-main-content {
+  margin-left: 0;
+  padding: 2rem;
+  min-height: calc(100vh - var(--navbar-height));
+  transition: margin-left 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+/* Stats Cards */
+.admin-stat-card {
+  background: var(--admin-bg-secondary);
+  border: 1px solid var(--admin-border-light);
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.admin-stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.admin-stat-card .card-body {
+  padding: 1.5rem;
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 1.5rem;
+  background: var(--admin-glass);
+  color: var(--admin-primary);
+}
+
+/* Table Styles */
+.admin-table-card {
+  background: var(--admin-bg-secondary);
+  border-radius: 16px;
+  border: 1px solid var(--admin-border-light);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.admin-table {
+  margin-bottom: 0;
+}
+
+.admin-table th {
+  background: var(--admin-bg-tertiary);
+  font-weight: 600;
+  padding: 1rem;
+  border-bottom: 2px solid var(--admin-border);
+}
+
+.admin-table td {
+  padding: 1rem;
+  vertical-align: middle;
+}
+
+/* Loading States */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+
+/* Modal Z-index Fix */
+.modal-backdrop {
+  z-index: 1045;
+}
+
+.modal {
+  z-index: 1046;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .admin-main-content {
+    padding: 1.5rem;
+  }
+  
+  .admin-navbar {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-main-content {
+    padding: 1rem;
+  }
+  
+  .admin-navbar {
+    padding: 0 1rem;
+  }
+  
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+  }
+  
+  .admin-stat-card .card-body {
+    padding: 1rem;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.stat-icon i {
+  animation: fadeIn 0.3s ease;
+}
+
+.admin-stat-card {
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

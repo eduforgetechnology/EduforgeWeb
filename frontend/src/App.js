@@ -13,6 +13,9 @@ import About from './components/About';
 import Contact from './components/Contact';
 import Services from './components/Services';
 import Dashboard from './components/Dashboard';
+import AdminPanel from './components/AdminPanel';
+import AdminLogin from './components/AdminLogin';
+import { Navigate } from 'react-router-dom';
 import AIAssistant from './components/AIAssistant';
 import CourseDetails from './components/CourseDetails';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -28,36 +31,62 @@ import './App.css';
 function App() {
   const { user } = useContext(AuthContext);
 
+  // If user is admin and logged in, show only admin interface
+  if (user && user.role === 'admin') {
+    return (
+      <Router>
+        <ScrollToTop />
+        <div className="App">
+          <Routes>
+            <Route path="/admin-login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminPanel />} />
+            {/* Redirect any other route to admin panel for admin users */}
+            <Route path="*" element={<Navigate to="/admin" replace />} />
+          </Routes>
+        </div>
+      </Router>
+    );
+  }
+
+  // Regular user interface
   return (
     <Router>
       <ScrollToTop />
       <div className="App">
-        <Navigation />
-
-        <div className="main-content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
-            <Route path="/courses/:courseId" element={<ProtectedRoute><CourseDetails /></ProtectedRoute>} />
-            <Route path="/educators" element={<ProtectedRoute><Educators /></ProtectedRoute>} />
-            <Route path="/tuitions" element={<ProtectedRoute><Tuitions /></ProtectedRoute>} />
-            <Route path="/competitions" element={<Competitions />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="/terms" element={<TermsOfService />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          </Routes>
-        </div>
-
-        <Footer />
-        <AIAssistant />
-        <PrivacyNotification />
+        <Routes>
+          {/* Admin Login Route - Available to all users */}
+          <Route path="/admin-login" element={<AdminLogin />} />
+          
+          {/* Regular Routes with Navigation/Footer for non-admin users */}
+          <Route path="/*" element={
+            <>
+              <Navigation />
+              <div className="main-content">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
+                  <Route path="/reset-password" element={<ResetPassword />} />
+                  <Route path="/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
+                  <Route path="/courses/:courseId" element={<ProtectedRoute><CourseDetails /></ProtectedRoute>} />
+                  <Route path="/educators" element={<ProtectedRoute><Educators /></ProtectedRoute>} />
+                  <Route path="/tuitions" element={<ProtectedRoute><Tuitions /></ProtectedRoute>} />
+                  <Route path="/competitions" element={<Competitions />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/services" element={<Services />} />
+                  <Route path="/privacy" element={<PrivacyPolicy />} />
+                  <Route path="/terms" element={<TermsOfService />} />
+                  <Route path="/faq" element={<FAQ />} />
+                  <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                </Routes>
+              </div>
+              <Footer />
+              <AIAssistant />
+              <PrivacyNotification />
+            </>
+          } />
+        </Routes>
       </div>
     </Router>
   );

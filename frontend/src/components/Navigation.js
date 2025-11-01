@@ -12,7 +12,8 @@ import {
   FaUser,
   FaEnvelope,
   FaBars,
-  FaServicestack
+  FaServicestack,
+  FaCog
 } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { AuthContext } from '../context/AuthContext';
@@ -270,6 +271,23 @@ const Navigation = () => {
                     <FaUser className="nav-icon" /> Dashboard
                   </Nav.Link>
                 </motion.div>
+                {user && user.role === 'admin' && (
+                  <motion.div
+                    variants={navItemVariants}
+                    initial="hidden"
+                    animate="visible"
+                    whileHover="hover"
+                  >
+                    <Nav.Link
+                      as={Link}
+                      to="/admin-panel"
+                      className={isActive('/admin-panel') ? 'active' : ''}
+                      onClick={() => setExpanded(false)}
+                    >
+                      <FaCog className="nav-icon" /> Admin Panel
+                    </Nav.Link>
+                  </motion.div>
+                )}
                 <motion.div
                   variants={navItemVariants}
                   initial="hidden"

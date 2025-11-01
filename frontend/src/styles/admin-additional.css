@@ -1,0 +1,178 @@
+/* Preview Modal Styles */
+.preview-modal {
+  backdrop-filter: blur(10px);
+}
+
+.preview-modal .modal-content {
+  background: var(--admin-glass-strong);
+  border: 1px solid var(--admin-glass-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-xl);
+}
+
+.preview-modal .modal-header {
+  border-bottom: 1px solid var(--admin-border);
+  padding: 1.5rem;
+}
+
+.preview-modal .modal-body {
+  padding: 2rem;
+}
+
+.preview-modal .modal-footer {
+  border-top: 1px solid var(--admin-border);
+  padding: 1.5rem;
+}
+
+.preview-content {
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--admin-bg-secondary);
+  box-shadow: var(--shadow-lg);
+}
+
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+}
+
+.video-container video,
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Responsive Table Improvements */
+.course-table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.course-table th,
+.course-table td {
+  position: relative;
+}
+
+.course-table th:first-child,
+.course-table td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: inherit;
+}
+
+@media (max-width: 1400px) {
+  .admin-main {
+    padding: 2.5rem;
+  }
+  
+  .course-table th,
+  .course-table td {
+    padding: 1rem 0.75rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .admin-main {
+    padding: 2rem;
+  }
+  
+  .course-table-container {
+    margin: 1rem -1rem;
+    width: calc(100% + 2rem);
+    border-radius: 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .admin-main {
+    padding: 1.5rem;
+  }
+  
+  .course-table th,
+  .course-table td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Fix for Modal Z-index Issues */
+.modal-backdrop {
+  z-index: 1040;
+}
+
+.modal {
+  z-index: 1050;
+}
+
+/* Fix for Table Overflow */
+.table-responsive {
+  margin-bottom: 0;
+  border: 0;
+}
+
+/* Enhance Button Spacing */
+.btn + .btn {
+  margin-left: 0.5rem;
+}
+
+/* Improve Card Appearance */
+.card {
+  border: 1px solid var(--admin-border-light);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-normal);
+}
+
+.card:hover {
+  border-color: var(--admin-border);
+  box-shadow: var(--shadow-md);
+}
+
+/* Table Row Hover Effect */
+.course-table tbody tr:hover {
+  background-color: var(--admin-bg-tertiary);
+}
+
+/* Enhanced Scrollbar for Table Container */
+.course-table-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.course-table-container::-webkit-scrollbar-track {
+  background: var(--admin-bg-tertiary);
+  border-radius: 4px;
+}
+
+.course-table-container::-webkit-scrollbar-thumb {
+  background: var(--admin-glass-strong);
+  border-radius: 4px;
+}
+
+/* Loading States */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.spinner-border {
+  color: var(--admin-primary);
+}
